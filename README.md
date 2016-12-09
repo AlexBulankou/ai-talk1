@@ -5,4 +5,4 @@
   - Use HTTPS and port 24001
 - Create website in IIS and point it to src\aspnet\tr24ai\tr24ai directory
   - Use HTTPS and port 24002
- 
+- Load website: https://localhost:24002/

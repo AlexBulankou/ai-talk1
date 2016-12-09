@@ -1,5 +1,6 @@
 ﻿namespace tr24ai.Controllers
 {
+    using System.Configuration;
     using System.Net.Http;
     using System.Web;
     using System.Web.Mvc;
@@ -16,10 +17,19 @@
             return View();
         }
 
+        public FileContentResult Header()
+        {
+            HttpClient httpClient = new HttpClient();
+            var responseTask = httpClient.GetAsync(ConfigurationManager.AppSettings["HeaderUrl"]);
+            var result = responseTask.Result.Content.ReadAsByteArrayAsync().Result;
+            return new FileContentResult(result, "image/png");
+
+        }
+
         public ContentResult Stock(string symbol)
         {
             HttpClient httpClient = new HttpClient();
-            var responseTask = httpClient.GetAsync("https://localhost:24001/?stock=" + symbol);
+            var responseTask = httpClient.GetAsync(ConfigurationManager.AppSettings["NodeServerUrl"] + "/?stock=" + symbol);
             var result = responseTask.Result.Content.ReadAsStringAsync().Result;
 
             if (!string.IsNullOrEmpty(result))
