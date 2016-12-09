@@ -13,16 +13,19 @@
 
 3. Press on "Application Insights" and then "Create" button to create a new Application Insights component
 4. In the creation form use the following properties to create Application Insights resource for the frontend application:
-    a. Name: **frontend**
-    b. Application Type: keep **ASP.NET web application**
-    c. Resource Group -> Create new: **frontend**
-    d. Location: **South Central US**
+
+  1. Name: **frontend**
+  2. Application Type: keep **ASP.NET web application**
+  3. Resource Group -> Create new: **frontend**
+  4. Location: **South Central US**
+  
 5. Open Application Insights creation form again (steps 2 and 3).
-4. In the creation form use the following properties to create Application Insights resource for the backend application:    
-    a. Name: **backend**
-    b. Application Type: keep **ASP.NET web application**
-    c. Resource Group -> Create new: **backend**
-    d. Location: **South Central US**
+4. In the creation form use the following properties to create Application Insights resource for the backend application:
+
+  1. Name: **backend**
+  2. Application Type: keep **ASP.NET web application**
+  3. Resource Group -> Create new: **backend**
+  4. Location: **South Central US**
 
 ###Set up reader Permissions
 
@@ -32,8 +35,9 @@
 
 2. On the backend resource group select menu item "Access control (IAM)" -> add
 3. On "Add access" blade use:
-    a. Select role: **Reader**
-    b. Add users: **Add your account** (just for illustration purposes)
+
+  1. Select role: **Reader**
+  2. Add users: **Add your account** (just for illustration purposes)
 
     ![image](/instructions/resource-group-add-role.png)
 
