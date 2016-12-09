@@ -2,7 +2,19 @@
 
 ##Introduction
 
-##Permissions/roles
+In the modern world microservices architecture allows to increase development agility and time to market. With the micro services simplicity and high independance you can employ "the best tool for the job". Contiunues delivery and DevOps practices makes development and releases of individual services easy and straightforward.   
+
+Microservices architecture comes at a price of: 
+
+1. Operations Overhead
+2. Distributed System Complexity
+3. End-to-end transactions resolving complexity
+4. Implicit Interfaces and versioning problems
+
+Application Insights makes it easier to monitor the microservices.
+
+
+## Excercise 1. Permissions/roles
 
 ###Create Application Inisghts resources
 
@@ -48,8 +60,8 @@
 
     ![image](/instructions/save-instrumentation-key-backend.png)
 
-##Onboaridng applicaitons
+## Excercise 2. Onboaridng applicaitons
 
-##Set up application map
+## Excercise 3. Set up application map
 
-##Find a bug/trace transactions
+## Excercise 4. Find a bug/trace transactions
