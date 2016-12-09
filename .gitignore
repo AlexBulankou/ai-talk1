@@ -1,1 +1,4 @@
-src/node/iisnode/*
+iisnode
+bin
+obj
+packages

@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TR24 AI for Microservices</title>
+</head>
+
+<body>
+    <div>
+        <img src="Home/Header" title="Header" />
+    </div>
+    <div data-role="page" id="home">
+        <div data-role="header">
+            <h1>Stock tracking app</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <ul data-role="listview">
+                <li><a href="Home/Details?stock=aapl">AAPL</a></li>
+                <li><a href="Home/Details?stock=amzn">AMZN</a></li>
+                <li><a href="Home/Details?stock=goog">GOOG</a></li>
+                <li><a href="Home/Details?stock=fb">FB</a></li>
+                <li><a href="Home/Details?stock=msft">MSFT</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

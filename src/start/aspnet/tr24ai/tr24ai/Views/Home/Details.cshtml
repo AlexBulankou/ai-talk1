@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewBag.Title = "Details";
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TR24 AI for Microservices</title>
+
+    <style type="text/css">
+        #stock-price,
+        #stock-price-change {
+            font-size: 4em;
+        }
+
+        .stock-price-plus {
+            color: green;
+        }
+
+        .stock-price-minus {
+            color: red;
+        }
+    </style>
+    <!-- NOTE to Alex!: when inserting the snippet don't forget   disableCorrelationHeaders: false -->
+</head>
+<body>
+
+    <div data-role="page" id="stock">
+        <div data-role="header" data-add-back-btn="true">
+
+            <h1 id="stock-h1">Stock information</h1>
+        </div>
+
+        <div role="main" class="ui-content">
+            <div id="stock-price"></div>
+            <div id="stock-price-change"></div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.rawgit.com/allmarkedup/purl/master/purl.js"></script>
+    <script type="text/javascript">
+        var stockSrvPath = "/Home/Stock?symbol=";
+
+        $(document).ready(function () {
+            window.setTimeout(function () {
+                var stockSymbol = $.url().param('stock');
+                $("#stock-h1").html(stockSymbol);
+                $.ajax(
+                    {
+                        url: stockSrvPath + stockSymbol,
+                        success: function (data) {
+                            $("#stock-price").html(data[0].l_cur);
+                            $("#stock-h1").html(data[0].t + "(" + data[0].e + ")");
+                            $("#stock-price-change").html(data[0].c);
+                            $("#stock-price-change").attr("class", (parseFloat(data[0].c) >= 0) ? "stock-price-plus" : "stock-price-minus");
+                        },
+                        error: function () {
+                            $("#stock-h1").html("Error retrieving data");
+                        }
+                    });
+                window.invalidCall();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
+
