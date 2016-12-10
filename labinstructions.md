@@ -11,7 +11,7 @@ Microservices architecture comes at a price of:
 3. End-to-end transactions resolving complexity
 4. Implicit Interfaces and versioning problems
 
-Application Insights makes it easier to monitor the microservices.
+Application Insights makes it easier to monitor the microservices. In this lab we will walk you thru the typical scenarios you'll implement while managing your microservices environment.
 
 
 ## Excercise 1. Permissions/roles
@@ -62,6 +62,8 @@ Application Insights makes it easier to monitor the microservices.
 
 ## Excercise 2. Onboaridng applicaitons
 
+TODO: add more details/pictures
+
  - From src/start/node run ``npm install``
  - In Azure portal create AI resource for node app and AI resource for aspnet app
  - Insert in src/start/node/package.js immediately after other require declarations:
@@ -85,7 +87,6 @@ window.appInsights = appInsights;
 appInsights.trackPageView();    
 </script>   
 ``
-
 
 ## Excercise 3. Set up application map
 
