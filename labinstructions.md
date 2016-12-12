@@ -1,5 +1,12 @@
 #ILL Instructions
 
+##Notes from Content Owner meeting
+1. [Recording](https://microsoft.sharepoint.com/teams/TRLabs/_layouts/15/Lightbox.aspx?url=https%3A%2F%2Fmicrosoft.sharepoint.com%2Fteams%2FTRLabs%2FShared%20Documents%2FTR24%20Content%20Owner%20Meeting%20-%20Option%202%20Recording.mp4)
+2. No corpnet access from the lab
+3. Upload VM to \\holhandoff\TR24handoff
+4. Lab content portal: https://microsoft.sharepoint.com/teams/TRLabs 
+5. Lab instructions sample template: https://microsoft.sharepoint.com/teams/TRLabs/_layouts/15/WopiFrame.aspx?sourcedoc=%7B7C5FFC38-726B-45D2-9F86-7D46D69193B3%7D&file=Simplified%20Template%20Example.docx&action=default
+
 ##Introduction
 
 In the modern world microservices architecture allows to increase development agility and time to market. With the micro services simplicity and high independance you can employ "the best tool for the job". Contiunues delivery and DevOps practices makes development and releases of individual services easy and straightforward.   
