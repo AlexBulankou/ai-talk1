@@ -60,10 +60,15 @@ Application Insights makes it easier to monitor the microservices. In this lab w
 
     ![image](/instructions/save-instrumentation-key-backend.png)
 
-## Excercise 2. Onboaridng applicaitons
+## Excercise 2. Onboarding applications
 
 TODO: add more details/pictures
 
+### Verify default applications not onboarded with AI:
+ - Verify that you have backend application running on HTTPs port 24001 by running https://localhost:24001/?stock=msft in your browser
+ - Verify that you have frontend application running on HTTPs port 24002 by running https://localhost:24002
+
+### Onboard NODE.JS application (backend)   
  - From src/start/node run ``npm install``
  - In Azure portal create AI resource for node app and AI resource for aspnet app
  - Insert in src/start/node/package.js immediately after other require declarations:
@@ -72,9 +77,9 @@ TODO: add more details/pictures
  appInsights.setup("<instrumentation_key_for_node_app>").start();
 ``
 
- - Onboard src/start/aspnet project to AI .NET SDK 2.2. Ensure ``instrumentation_key_for_aspnet_app`` is used
- - Rebuild aspnet app
- - Add JS snippet to the end of the head tag for both Index.cshtml and Details.cshtml. NOTE that you need to add ``disableCorrelationHeaders: false`` to the snippet:    
+### Onboard ASP.NET aplication (frontend)   
+ - To enable AI for server-sde open \src\start\aspnet\tr24ai\tr24ai\ApplicationInsights.config and replace ``<!-- Insert instrumentation key here-->`` with ``<InstrumentationKey>instrumentation_key_for_aspnet_app</InstrumentationKey>``
+ - To enable AI for client side Add JS snippet to the end of the head tag for both Index.cshtml and Details.cshtml. NOTE that you need to add ``disableCorrelationHeaders: false`` to the snippet:    
 ``
 <script type="text/javascript">     
 var appInsights = window.appInsights || function (config) {      
