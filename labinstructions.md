@@ -78,8 +78,8 @@ Application Insights supports telemetry collection from many different languages
 
 This machine comes with IIS configured to serve both components of the microservice.
 
-1. Verify that you have frontend application is running on HTTPs port 24002 by running https://localhost:24002 in the browser
-2. Verify that you have backend application is running on HTTPs port 24001 by running https://localhost:24001/?stock=msft 
+1. Verify that you have frontend application is running on HTTP port 24002 by running http://localhost:24002 in the browser
+2. Verify that you have backend application is running on HTTP port 24001 by running http://localhost:24001/?stock=msft 
 
 ### Task 2. Onboard NODE.JS application (backend)
 
@@ -95,7 +95,7 @@ Application Insights Node.JS SDK is one of the most popular. Enabling of Applica
     var appInsights = require("applicationinsights");
     appInsights.setup("<instrumentation_key_for_node_app>").start();
     ```
-4. Verify that you have backend application is still running on HTTPs port 24001 by running https://localhost:24001/?stock=msft 
+4. Verify that you have backend application is still running on HTTP port 24001 by running http://localhost:24001/?stock=msft 
 
 TODO: Insert screenshot here
 
@@ -107,7 +107,7 @@ There are many ways to enable Application Insights for ASP.NET application. In t
 1. Open folder `\src\start\aspnet\tr24ai\tr24ai`
 3. Open file `ApplicationInsights.config`
 4. Replace  `<!-- Insert instrumentation key here-->` with the instrumentation key from the step 1 `<InstrumentationKey>instrumentation_key_for_aspnet_app</InstrumentationKey>`
-5. Verify that you have frontend applicationis still running on HTTPs port 24002 by running https://localhost:24002 in the browser
+5. Verify that you have frontend applicationis still running on HTTP port 24002 by running http://localhost:24002 in the browser
 6. Open **frontend** component in Azure portal. Live Stream tile should show 1 instance
 
     ![image](/instructions/live-stream-frontend.png)
