@@ -21,6 +21,13 @@ If your solution consists of multiple services communicating to each other, you 
   - Use HTTPS and port 24002
 - Load website: https://localhost:24002/
 
+##Notes from Content Owner meeting
+1. [Recording](https://microsoft.sharepoint.com/teams/TRLabs/_layouts/15/Lightbox.aspx?url=https%3A%2F%2Fmicrosoft.sharepoint.com%2Fteams%2FTRLabs%2FShared%20Documents%2FTR24%20Content%20Owner%20Meeting%20-%20Option%202%20Recording.mp4)
+2. No corpnet access from the lab
+3. Upload VM to \\holhandoff\TR24handoff
+4. Lab content portal: https://microsoft.sharepoint.com/teams/TRLabs 
+5. Lab instructions sample template: https://microsoft.sharepoint.com/teams/TRLabs/_layouts/15/WopiFrame.aspx?sourcedoc=%7B7C5FFC38-726B-45D2-9F86-7D46D69193B3%7D&file=Simplified%20Template%20Example.docx&action=default
+
 ## Lab instructions
 
 Lab instructions located [here](/labinstructions.md)
