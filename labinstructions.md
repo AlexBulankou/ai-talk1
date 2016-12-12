@@ -78,8 +78,8 @@ Application Insights supports telemetry collection from many different languages
 
 This machine comes with IIS configured to serve both components of the microservice.
 
-1. Verify that you have frontend application running on HTTPs port 24002 by running https://localhost:24002 in the browser
-2. Verify that you have backend application running on HTTPs port 24001 by running https://localhost:24001/?stock=msft 
+1. Verify that you have frontend application is running on HTTPs port 24002 by running https://localhost:24002 in the browser
+2. Verify that you have backend application is running on HTTPs port 24001 by running https://localhost:24001/?stock=msft 
 
 ### Task 2. Onboard NODE.JS application (backend)
 
@@ -95,6 +95,7 @@ Application Insights Node.JS SDK is one of the most popular. Enabling of Applica
     var appInsights = require("applicationinsights");
     appInsights.setup("<instrumentation_key_for_node_app>").start();
     ```
+4. Verify that you have backend application is still running on HTTPs port 24001 by running https://localhost:24001/?stock=msft 
 
 TODO: Insert screenshot here
 
@@ -106,6 +107,10 @@ There are many ways to enable Application Insights for ASP.NET application. In t
 1. Open folder `\src\start\aspnet\tr24ai\tr24ai`
 3. Open file `ApplicationInsights.config`
 4. Replace  `<!-- Insert instrumentation key here-->` with the instrumentation key from the step 1 `<InstrumentationKey>instrumentation_key_for_aspnet_app</InstrumentationKey>`
+5. Verify that you have frontend applicationis still running on HTTPs port 24002 by running https://localhost:24002 in the browser
+6. Open **frontend** component in Azure portal. Live Stream tile should show 1 instance
+
+    ![image](/instructions/live-stream-frontend.png)
 
 ### Task 4. Enabling telemetry collection from the JavaScript (frontend)
 
@@ -132,6 +137,69 @@ There is no reason to use the same instrumentation key for the JavaScript and se
     </script>   
     ```
     4. Replace `instrumentation_key_for_aspnet_app` in the inserted snippet to the actual instrumentation key
+
+
+## Excercise 3. Create a microservice dashboard
+
+When running a microservices it is important to have a single pane of glass view to the application behavior. Single view allows to see how performance degradation of one component affects other and how to see the load on all instances of your microservice. In this excercise we will create a dashboard combining basic information from both backend and frontend components.
+
+###Task 1. Create a new dashboard
+
+Create an empty dashboard for your microservices application
+
+1. Open Azure portal, click on "Microsoft Azure" title to open your default dashboard
+2. Click a "+ New dashboard" button
+3. Dashboard customization page will appear
+4. Name your dashboard "My microservice app" and click "Done customizing" in the very top. Now it is your default dashboard and it is empty
+
+    ![image](/instructions/dashboard-step1.png)
+
+
+###Task 2. Add performance charts to the dashboard
+
+One of the big problems in microservices is an operations overhead and overall system complexity. In some multi-layer scenarios it is easy to see how overall application performance degradation is distributed by layers by placing corresponding charts on top of each other.
+
+1. Open **frontend** application by typing it's name in the search box.  
+2. Select "Performance" menu item to open performance blade:
+
+    ![image](/instructions/dashboard-step2-open-frontend.png)
+
+3. Pin performance charts to the dashboard by clicking 📌 (:pushpin:) button in the top right corner of the chart: 
+
+    ![image](/instructions/dashboard-step2-pin-performance-chart.png)
+
+4. Perform steps 1-3 for the **backend** component
+5. Open default dashboard by clicking on "Microsoft Azure" title in the top left corner 
+6. Drag and drop charts to place them one on top of another. Click "Done customizing" in the very top when complete
+
+    ![image](/instructions/dashboard-step3-performance-view.png)
+
+###Task 3. Add application map to the dashboard
+
+Viewing overall application topology is important for an overview dashboard.
+
+1. Open **frontend** application by typing it's name in the search box.  
+2. Select "Application Map" menu item
+3. Pin Application Map to the dashboard by clicking 📌 (:pushpin:) button 
+5. Open default dashboard by clicking on "Microsoft Azure" title in the top left corner
+5. You should see performance charts and application map on the same dashboard
+
+###Task 4. View instances data on dashboard
+
+Many performance issues may be solved by scaling components of the multi-service application. You need to see the current state of every instace of your application.
+
+1. Open **frontend** application by typing it's name in the search box.  
+2. Select "Servers" menu item to open servers blade
+3. Servers blade shows charts and the list of instances this component it running on
+4. Click  📌 (:pushpin:) button in the right top corner of the servers list to pin this list to the dashboard
+
+    ![image](/instructions/dashboard-step4-pin-servers-list.png)
+
+4. Perform steps 1-4 for the **backend** component
+5. Open default dashboard by clicking on "Microsoft Azure" title in the top left corner 
+6. Drag and drop charts to place servers lists one on top of another
+
+    ![image](/instructions/dashboard-step5-final-dashboard.png)
 
 ## Excercise 3. Set up application map
 
