@@ -12,14 +12,17 @@ If your solution consists of multiple services communicating to each other, you 
 
 ## Setup VM
 - Sync sources
+- Install GIT for Windows
+- Install latest Node.js build for Windows
+- Install URL Rewrite
 - Install iisnode for IIS 7.x/8.x: [x86](https://github.com/azure/iisnode/releases/download/v0.2.21/iisnode-full-v0.2.21-x86.msi) or [x64](https://github.com/azure/iisnode/releases/download/v0.2.21/iisnode-full-v0.2.21-x64.msi) - choose bitness matching your system
 - Install [Status Monitor](http://go.microsoft.com/fwlink/?LinkID=522371&clcid=0x409), restart IIS
 - Create website in IIS and point it to \src\start\node directory
-  - Use HTTPS and port 24001
+  - Use HTTP and port 24001
   ![img](/instructions/1.PNG)
 - Create website in IIS and point it to src\start\aspnet\tr24ai\tr24ai directory
-  - Use HTTPS and port 24002
-- Load website: https://localhost:24002/
+  - Use HTTP and port 24002
+- Load website: http://localhost:24002/
 
 ##Notes from Content Owner meeting
 1. [Recording](https://microsoft.sharepoint.com/teams/TRLabs/_layouts/15/Lightbox.aspx?url=https%3A%2F%2Fmicrosoft.sharepoint.com%2Fteams%2FTRLabs%2FShared%20Documents%2FTR24%20Content%20Owner%20Meeting%20-%20Option%202%20Recording.mp4)
