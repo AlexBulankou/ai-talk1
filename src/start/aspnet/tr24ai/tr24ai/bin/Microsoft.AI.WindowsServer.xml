@@ -464,6 +464,39 @@
             Disposing UnhandledExceptionTelemetryModule instance.
             </summary>
         </member>
+        <member name="T:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule">
+            <summary>
+            The module subscribed to AppDomain.CurrentDomain.FirstChanceException to send exceptions statistics to ApplicationInsights.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule.executionSyncObject">
+            <summary>
+            This object prevents double entry into the exception callback.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule" /> class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule.Initialize(Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration)">
+            <summary>
+            Initializes the telemetry module.
+            </summary>
+            <param name="configuration">Telemetry Configuration used for creating TelemetryClient for sending exception statistics to Application Insights.</param>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule.Dispose">
+            <summary>
+            Disposing TaskSchedulerOnUnobservedTaskException instance. This class doesn't have the finalize method as we expect it 
+            live for a duration of the process and be disposed by AI infrastructure.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule.Dispose(System.Boolean)">
+            <summary>
+            IDisposable implementation.
+            </summary>
+            <param name="disposing">The method has been called directly or indirectly by a user's code.</param>
+        </member>
         <member name="T:Microsoft.ApplicationInsights.WindowsServer.UnobservedExceptionTelemetryModule">
             <summary>
             The module subscribed to TaskScheduler.UnobservedTaskException to send exceptions to ApplicationInsights.

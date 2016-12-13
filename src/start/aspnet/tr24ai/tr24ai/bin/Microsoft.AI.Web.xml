@@ -215,6 +215,12 @@
             Required IDisposable implementation.
             </summary>
         </member>
+        <member name="M:Microsoft.ApplicationInsights.Web.ApplicationInsightsHttpModule.AddCorreleationHeaderOnSendRequestHeaders(System.Web.HttpApplication)">
+            <summary>
+            When sending the response headers, allow request module to add the IKey's target hash.
+            </summary>
+            <param name="httpApplication">HttpApplication instance.</param>
+        </member>
         <member name="T:Microsoft.ApplicationInsights.Web.AuthenticatedUserIdTelemetryInitializer">
             <summary>
             A telemetry initializer that will set the User properties of Context corresponding to a RequestTelemetry object.
@@ -332,6 +338,11 @@
             if request was successful.
             </summary>
         </member>
+        <member name="P:Microsoft.ApplicationInsights.Web.RequestTrackingTelemetryModule.SetComponentCorrelationHttpHeaders">
+            <summary>
+            Gets or sets a value indicating whether the component correlation headers would be set on http responses.
+            </summary>
+        </member>
         <member name="M:Microsoft.ApplicationInsights.Web.RequestTrackingTelemetryModule.OnBeginRequest(System.Web.HttpContext)">
             <summary>
             Implements on begin callback of http module.
@@ -340,6 +351,11 @@
         <member name="M:Microsoft.ApplicationInsights.Web.RequestTrackingTelemetryModule.OnEndRequest(System.Web.HttpContext)">
             <summary>
             Implements on end callback of http module.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.Web.RequestTrackingTelemetryModule.AddTargetHashForResponseHeader(System.Web.HttpContext)">
+            <summary>
+            Adds target response header response object.
             </summary>
         </member>
         <member name="M:Microsoft.ApplicationInsights.Web.RequestTrackingTelemetryModule.Initialize(Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration)">
@@ -420,6 +436,55 @@
             <param name="platformContext">Http context.</param>
             <param name="requestTelemetry">Request telemetry object associated with the current request.</param>
             <param name="telemetry">Telemetry item to initialize.</param>
+        </member>
+        <member name="T:Microsoft.ApplicationInsights.Common.RequestResponseHeaders">
+            <summary>
+            Header names for requests / responses.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Common.RequestResponseHeaders.SourceInstrumentationKeyHeader">
+            <summary>
+            Source instrumentation header that is added by an application while making http requests and retrieved by the other application when processing incoming requests.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Common.RequestResponseHeaders.TargetInstrumentationKeyHeader">
+            <summary>
+            Target instrumentation header that is added to the response and retrieved by the calling application when processing incoming responses.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Common.RequestResponseHeaders.StandardParentIdHeader">
+            <summary>
+            Standard parent Id header.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Common.RequestResponseHeaders.StandardRootIdHeader">
+            <summary>
+            Standard root id header.
+            </summary>
+        </member>
+        <member name="T:Microsoft.ApplicationInsights.Common.InstrumentationKeyHashLookupHelper">
+            <summary>
+            A store for instrumentation key hashes. This is order so as to optimize the computation of hashes.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Common.InstrumentationKeyHashLookupHelper.MAXSIZE">
+            <summary>
+            Max number of component hashes to cache.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.Common.InstrumentationKeyHashLookupHelper.GetInstrumentationKeyHash(System.String)">
+            <summary>
+            Retrieves the hash for a given instrumentation key.
+            </summary>
+            <param name="instrumentationKey">Instrumentation key string.</param>
+            <returns>SHA256 hash for the instrumentation key.</returns>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.Common.InstrumentationKeyHashLookupHelper.GenerateEncodedSHA256Hash(System.String)">
+            <summary>
+            Computes the SHA256 hash for a given value and returns it in the form of a base64 encoded string.
+            </summary>
+            <param name="value">Value for which the hash is to be computed.</param>
+            <returns>Base64 encoded hash string.</returns>
         </member>
         <member name="T:System.Web.HttpContextExtension">
             <summary>

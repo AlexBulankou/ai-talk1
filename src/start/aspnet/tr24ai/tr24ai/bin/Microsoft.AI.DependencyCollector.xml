@@ -228,7 +228,7 @@
             received from Profiler instrumentation for HTTP .   
             </summary>
         </member>
-        <member name="M:Microsoft.ApplicationInsights.DependencyCollector.Implementation.ProfilerHttpProcessing.#ctor(Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration,System.String,Microsoft.ApplicationInsights.DependencyCollector.Implementation.Operation.ObjectInstanceBasedOperationHolder)">
+        <member name="M:Microsoft.ApplicationInsights.DependencyCollector.Implementation.ProfilerHttpProcessing.#ctor(Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration,System.String,Microsoft.ApplicationInsights.DependencyCollector.Implementation.Operation.ObjectInstanceBasedOperationHolder,System.Boolean,System.Collections.Generic.ICollection{System.String})">
             <summary>
             Initializes a new instance of the <see cref="T:Microsoft.ApplicationInsights.DependencyCollector.Implementation.ProfilerHttpProcessing"/> class.
             </summary>
@@ -815,6 +815,16 @@
             Gets or sets a value indicating whether to disable runtime instrumentation.
             </summary>
         </member>
+        <member name="P:Microsoft.ApplicationInsights.DependencyCollector.DependencyTrackingTelemetryModule.ExcludeComponentCorrelationHttpHeadersOnDomains">
+            <summary>
+            Gets the component correlation configuration.
+            </summary>
+        </member>
+        <member name="P:Microsoft.ApplicationInsights.DependencyCollector.DependencyTrackingTelemetryModule.SetComponentCorrelationHttpHeaders">
+            <summary>
+            Gets or sets a value indicating whether the correlation headers would be set on outgoing http requests.
+            </summary>
+        </member>
         <member name="M:Microsoft.ApplicationInsights.DependencyCollector.DependencyTrackingTelemetryModule.Dispose">
             <summary>
             IDisposable implementation.
@@ -841,6 +851,17 @@
             Initialize for runtime instrumentation or framework event source.
             </summary>
         </member>
+        <member name="T:Microsoft.ApplicationInsights.DependencyCollector.SanitizedHostList">
+            <summary>
+            Sanitized collection on host strings.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.DependencyCollector.SanitizedHostList.Add(System.String)">
+            <summary>
+            We sanitize before adding to the list. We try our best to extract the host name from the passed in item and store that in the collection.
+            </summary>
+            <param name="item">Item to be added.</param>
+        </member>
         <member name="T:Microsoft.ApplicationInsights.DependencyCollector.TelemetryExtensionsForDependencyCollector">
             <summary>
             Dependency Telemetry extension methods to associate with request objects and to store in conditional/cache tables to avoid duplicate tracking.
@@ -865,6 +886,55 @@
             <param name="telemetry">Telemetry object that needs to be associated with the web request.</param>
             <param name="sqlRequest">SQL request object which is used as a key to store in the tables.</param>
             <returns>Dependency telemetry item with an associated dependency telemetry item.</returns>
+        </member>
+        <member name="T:Microsoft.ApplicationInsights.Common.RequestResponseHeaders">
+            <summary>
+            Header names for requests / responses.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Common.RequestResponseHeaders.SourceInstrumentationKeyHeader">
+            <summary>
+            Source instrumentation header that is added by an application while making http requests and retrieved by the other application when processing incoming requests.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Common.RequestResponseHeaders.TargetInstrumentationKeyHeader">
+            <summary>
+            Target instrumentation header that is added to the response and retrieved by the calling application when processing incoming responses.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Common.RequestResponseHeaders.StandardParentIdHeader">
+            <summary>
+            Standard parent Id header.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Common.RequestResponseHeaders.StandardRootIdHeader">
+            <summary>
+            Standard root id header.
+            </summary>
+        </member>
+        <member name="T:Microsoft.ApplicationInsights.Common.InstrumentationKeyHashLookupHelper">
+            <summary>
+            A store for instrumentation key hashes. This is order so as to optimize the computation of hashes.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Common.InstrumentationKeyHashLookupHelper.MAXSIZE">
+            <summary>
+            Max number of component hashes to cache.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.Common.InstrumentationKeyHashLookupHelper.GetInstrumentationKeyHash(System.String)">
+            <summary>
+            Retrieves the hash for a given instrumentation key.
+            </summary>
+            <param name="instrumentationKey">Instrumentation key string.</param>
+            <returns>SHA256 hash for the instrumentation key.</returns>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.Common.InstrumentationKeyHashLookupHelper.GenerateEncodedSHA256Hash(System.String)">
+            <summary>
+            Computes the SHA256 hash for a given value and returns it in the form of a base64 encoded string.
+            </summary>
+            <param name="value">Value for which the hash is to be computed.</param>
+            <returns>Base64 encoded hash string.</returns>
         </member>
     </members>
 </doc>
