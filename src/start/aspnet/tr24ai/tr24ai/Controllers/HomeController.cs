@@ -1,6 +1,8 @@
 ﻿namespace tr24ai.Controllers
 {
     using System.Configuration;
+    using System.IO;
+    using System.Net;
     using System.Net.Http;
     using System.Web;
     using System.Web.Mvc;
@@ -19,18 +21,25 @@
 
         public FileContentResult Header()
         {
-            HttpClient httpClient = new HttpClient();
-            var responseTask = httpClient.GetAsync(ConfigurationManager.AppSettings["HeaderUrl"]);
-            var result = responseTask.Result.Content.ReadAsByteArrayAsync().Result;
-            return new FileContentResult(result, "image/png");
+            var result = new MemoryStream();
+            HttpWebRequest httpClient = (HttpWebRequest)HttpWebRequest.Create(ConfigurationManager.AppSettings["HeaderUrl"]);
+            using (var responseStream = httpClient.GetResponse().GetResponseStream())
+            {
+                responseStream.CopyTo(result);
+            }
+
+            return new FileContentResult(result.ToArray(), "image/png");
 
         }
 
         public ContentResult Stock(string symbol)
         {
-            HttpClient httpClient = new HttpClient();
-            var responseTask = httpClient.GetAsync(ConfigurationManager.AppSettings["NodeServerUrl"] + "/?stock=" + symbol);
-            var result = responseTask.Result.Content.ReadAsStringAsync().Result;
+            var result = string.Empty;
+            HttpWebRequest httpClient = (HttpWebRequest)HttpWebRequest.Create((ConfigurationManager.AppSettings["NodeServerUrl"] + "/?stock=" + symbol));
+            using (StreamReader reader = new StreamReader(httpClient.GetResponse().GetResponseStream()))
+            {
+                result = reader.ReadToEnd();
+            }
 
             if (!string.IsNullOrEmpty(result))
             {
