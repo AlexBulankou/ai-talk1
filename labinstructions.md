@@ -104,17 +104,18 @@ TODO: Insert screenshot here
 There are many ways to enable Application Insights for ASP.NET application. In this lab the application already has Application Insights SDK enabled as it would be when creating an ASP.NET project in Visual Studio with Application Insights option checked. The only modification you need to do is to configure the instrumentation key.
 
 1. Get the **frontend** component instrumentation key from the first excercise 
-1. Open folder `src\start\aspnet\tr24ai\tr24ai\bin`
+2. Open folder `src\start\aspnet\tr24ai\tr24ai\bin`
 3. Open file `ApplicationInsights.config`
 4. Replace  `<!-- Insert instrumentation key here-->` with the instrumentation key from the step 1 `<InstrumentationKey>instrumentation_key_for_aspnet_app</InstrumentationKey>`
-5. Verify that you have frontend applicationis still running on HTTP port 24002 by running http://localhost:24002 in the browser
-6. Open **frontend** component in Azure portal. Live Stream tile should show 1 instance
+5. Repeat steps 3-4 for `ApplicationInsights.config` in `src\start\aspnet\tr24ai\tr24ai` folder.
+6. Verify that you have frontend applicationis still running on HTTP port 24002 by running http://localhost:24002 in the browser
+7. Open **frontend** component in Azure portal. Live Stream tile should show 1 instance
 
     ![image](/instructions/live-stream-frontend.png)
 
 ### Task 4. Enabling telemetry collection from the JavaScript (frontend)
 
-There is no reason to use the same instrumentation key for the JavaScript and server side components of the application. With the modern rich UI it is not rare that a single JavaScript UI has many backend dependencies and do not have a "main" frontend backend. In this lab however we will use the same instrumentation key for JavaScript and server side code of the front end component of our microservice.
+There is no reason to use the same instrumentation key for the JavaScript and server side components of the application. With modern rich UI it is not rare for a single JavaScript UI to have many backend dependencies and not have the "main" frontend backend. In this lab, however, we will use the same instrumentation key for JavaScript and server side code of the frontend component of our microservice.
 
 1. Get the **frontend** component instrumentation key from the first excercise 
 1. Open folder `\src\start\aspnet\tr24ai\tr24ai\Views\Home`
@@ -141,7 +142,7 @@ There is no reason to use the same instrumentation key for the JavaScript and se
 
 ## Excercise 3. Create a microservice dashboard
 
-When running a microservices it is important to have a single pane of glass view to the application behavior. Single view allows to see how performance degradation of one component affects other and how to see the load on all instances of your microservice. In this excercise we will create a dashboard combining basic information from both backend and frontend components.
+When running microservices it is important to have a single pane of glass view to the application behavior. Single view allows to see how performance degradation of one component affects other components and allows you to see the load on all instances of your microservice. In this excercise we will create a dashboard combining basic information from both backend and frontend components.
 
 ###Task 1. Create a new dashboard
 
@@ -157,7 +158,7 @@ Create an empty dashboard for your microservices application
 
 ###Task 2. Add performance charts to the dashboard
 
-One of the big problems in microservices is an operations overhead and overall system complexity. In some multi-layer scenarios it is easy to see how overall application performance degradation is distributed by layers by placing corresponding charts on top of each other.
+One of the big problems in microservices is operations overhead and overall system complexity. In multi-layer scenarios it is easy to see how overall application performance degradation is distributed by layers by placing corresponding charts on top of each other.
 
 1. Open **frontend** application by typing it's name in the search box.  
 2. Select "Performance" menu item to open performance blade:
@@ -178,7 +179,7 @@ One of the big problems in microservices is an operations overhead and overall s
 
 Viewing overall application topology is important for an overview dashboard.
 
-1. Open **frontend** application by typing it's name in the search box.  
+1. Open **frontend** application by typing its name in the search box.  
 2. Select "Application Map" menu item
 3. Pin Application Map to the dashboard by clicking 📌 (:pushpin:) button 
 5. Open default dashboard by clicking on "Microsoft Azure" title in the top left corner
