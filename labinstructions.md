@@ -201,9 +201,42 @@ Many performance issues may be solved by scaling components of the multi-service
 
     ![image](/instructions/dashboard-step5-final-dashboard.png)
 
-## Excercise 3. Set up application map
+## Excercise 4. Configure Application Map
+
+Application Map represents topology of your application. It shows health and performance metrics for incoming requests into your application, as well as for outgoing requests that your application is making. In this exercise you will learn how to use Application Map for basic scenarios, as well as how to configure cross-component correlation, which is an experiemental feature. 
+
+###Task 1. View topology of backend application
+
+1. Open Application Map for **backend**. Observe that there are two nodes shown: server and node and remote dependency node. Note, that remote dependency node is showing signifficant percentage of failing calls, however these errors are not propagated to the callers of backend, because all requests are successful.
+
+    ![image](/instructions/appmap-be.PNG)
+
+2. Click on ``...`` button on ``finance.google.com`` remote dependency and open failed calls. See if there is anything unusual about the failing calls.
+3. Observe that there's a dependency call made for every call into **backend** component. Open ``Filters`` by clicking the button on Application Map header and apply the filter to only show responses with 204 status code. Note the ratio of 204 responses to 200 responses and compare it with the ratio of failing to successful dependency calls.
+
+    ![image](/instructions/appmap-be204.PNG)
+
+###Task 2. View topology of frontend application and diagnose a configuration issue.
+
+1. Open Application Map for **frontend**. Observe that there's Client and Server components shown on the map. 
+
+    ![image](/instructions/appmap-fe.PNG)
+    
+2. For Client component note that its status is shown as failing due to script errors detected on the page. Click on the red icon to open the script error view.
+3. Note that one of server-side dependencies, ``www.narayaniservices.com`` is showing 100% of failures. Click on ``...`` button to open failed calls. Try to understand the reason, why there hasn't be a single successful call, which for remote dependencies often indicates configuration error.
+4. Try to understand and fix the issue. Hint: open web.config for **frontend** application and review the URL specified as HeaderUrl.
+5. Once the issue is fixed you will start seeing successful dependencies appearing for ``www.narayaniservices.com``.
+
+###Task 3. View multi-server application map (experimental feature)
+
+1. This task uses experimental Application Map feature that is not yet available to everyone. To ensure you're loading the version of the portal with this feature enabled, reload the portal with the following link: https://portal.azure.com/?appInsightsExtension_OverrideSettings=appMapExperience:appMapLegacyErrorPaneMultiServer
+
+2.  Tag both **frontend** and **backend** applications with the same key:value pair. To add the tag, open Application Insights resource and click on Tags in the resource menu. In the Tags blade and key and value and click Save. Make sure to use the same tag key and value for both **frontend** and **backend**
+
+    ![image](/instructions/appmap-tags.PNG)
+
+###Task 4. Configure error threasholds. 
 
 
 
-
-## Excercise 4. Find a bug/trace transactions
+## Excercise 5. Find a bug/trace transactions
