@@ -235,8 +235,29 @@ Application Map represents topology of your application. It shows health and per
 
     ![image](/instructions/appmap-tags.PNG)
 
-###Task 4. Configure error threasholds. 
+3. Open Application Map for **backend** component and click Filters on the header to open Filters blade.
+4. Under tags section on the Filters blade, check the tag that you just added.
+
+    ![image](/instructions/appmap-tags-apply.PNG)
+
+5. Click ``Update`` to apply your changes and close Filters blade. Click ``Refresh`` on the Application Map header to see your changes. 
+6. You can now see **frontend** application appearing on Application Map alongside **backend** application.
+7. Select **backend** application node on the map. You will see incoming calls from **frontend** application.
+
+    ![image](/instructions/appmap-be-x.PNG)
+
+8. Now select **frontend** application node on the map. You will see outgoing calls to **backend** application. Spend some time studying how backend component is displayed in this view. It is showing both dependency metrics for the call originating from frontend component, as well as server metrics for the calls originating from all other potential callers into backend component.
+
+    ![image](/instructions/appmap-fe-x.PNG)
 
 
+###Task 4. Configure error thresholds, filters and pinning.
+1. Open Application Map for **frontend** component.
+2. Cick on Options button on the header to open Options pane. Try changing error and warning thresholds for Application Map so that all nodes appear green. Consider why in some cases thresholds should be adjusted to a higher level.
+3. Open Filters blade to filter the map by ``GET Home/Header`` operation. Apply your changes. Note how only dependencies that are invoked as part of this call are shown.
+
+    ![image](/instructions/appmap-fe-filter.PNG)
+    
+4. Click on 📌 (:pushpin:) button in the top right corner to save the updated map to your dashboard. Close the blade and reload the page. Note that the map on the dashboard has preserved custom filter settings.
 
 ## Excercise 5. Find a bug/trace transactions
