@@ -274,9 +274,7 @@ Out of the box Application Insights allows to track the transaction execution ac
 
     ![image](/instructions/get-failed-request-correlation-id.png)
 
-    reqiest-ids.png
-
-4. Copy the Operation Id. In the screenshot above it was `STYz`.
+4. Copy the Operation Id. In the screenshot above it has value `STYz`.
 5. Return to the **frontend** application overview blade and click "Analytics" in the top menu
 6. Type the analytics query:
 
@@ -320,9 +318,10 @@ Out of the box Application Insights allows to track the transaction execution ac
 appInsights.client.addTelemetryProcessor((envelope, context) => {
     if (envelope.data.baseType === "Microsoft.ApplicationInsights.RemoteDependencyData") {
         var reqOptions = context["http.RequestOptions"];
-        // get 
+        // get the correlation id from headers
         var id = reqOptions && reqOptions.headers && reqOptions.headers["x-ms-request-root-id"];
         if (id !== undefined) {
+            // associate telemetry item with this correlaiton id
             envelope.tags["ai.operation.id"] = id;
         }
     }
