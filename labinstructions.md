@@ -272,7 +272,7 @@ Out of the box Application Insights allows to track the transaction execution ac
 
 3. Click on "..." to open all properties and type "id" in the filter.
 
-    ![image](get-failed-request-correlation-id.png)
+    ![image](/instructions/get-failed-request-correlation-id.png)
 
     reqiest-ids.png
 
@@ -298,7 +298,7 @@ Out of the box Application Insights allows to track the transaction execution ac
 ###Task 2. Cross components correlation
 1. Open the failed request blade from the Task 1.
 
-    ![image](get-failed-request-correlation-id.png)
+    ![image](/instructions/get-failed-request-correlation-id.png)
 
 2. Failed request has a dependency call with the name `localhost | jQfGIonzN758c9rYzdlnz9Rsni8mTQ3DDnv60BtSdRg=`
 3. The id `jQfGIonzN758c9rYzdlnz9Rsni8mTQ3DDnv60BtSdRg=` represents SHA256 for the instrumentation key of **backend**. In the next versions of UI we will open the related component automatically. In this version of UI - copy the request operation Id.
@@ -344,6 +344,6 @@ http.get({ host: "finance.google.com", path: path + stock, headers }, function (
 3. Restart IIS
 4. Open the latest request telemetry in **backend** application. See that it is correlation now with the dependency call:
 
-    ![image](now-they-are-correlated.png)
+    ![image](/instructions/now-they-are-correlated.png)
 
 5. You may see that requests with the status code 204 will have a failed dependency calls inside.
