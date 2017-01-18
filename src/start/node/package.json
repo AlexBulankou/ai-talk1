@@ -4,7 +4,7 @@
   "description": "",
   "main": "process.js",
   "dependencies": {
-    "applicationinsights": "^0.17.0"
+    "applicationinsights": "^0.18.0"
   },
   "devDependencies": {},
   "scripts": {
