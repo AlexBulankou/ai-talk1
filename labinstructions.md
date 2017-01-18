@@ -2,27 +2,27 @@
 
 ##Introduction
 
-In the modern world microservices architecture allows to increase development agility and time to market. With the micro services simplicity and high independance you can employ "the best tool for the job". Contiunues delivery and DevOps practices makes development and releases of individual services easy and straightforward.   
+In the modern world micro-services architecture allows to increase development agility and time to market. With the micro-services simplicity and high independance you can employ "the best tool for the job" for every service and for every situation.. Continuous delivery and DevOps practices make development and releases of individual services easy and straightforward.   
 
-Microservices architecture comes at a price of: 
+At the same time, micro-services architecture comes at a price of: 
 
-1. Operations Overhead
-2. Distributed System Complexity
-3. End-to-end transactions resolving complexity
-4. Implicit Interfaces and versioning problems
+1. Operations overhead
+2. Distributed systems complexity
+3. Complexity when investigating end-to-end transactions
+4. Using implicit interfaces between services is error-prone and can cause versioning problems
 
-Application Insights makes it easier to monitor the microservices. In this lab we will walk you thru the typical scenarios you'll implement while managing your microservices environment.
+In this lab we will walk you through onboarding your micro-services to Application Insights to demonstrate how it can make management and diagnostics easier.
 
 
-## Excercise 1. Configure Application Insights for the different application components
+## Excercise 1. Configure Application Insights for Different Application Components
 
-You'll learn how to create Application Insights resource for different components of your microservice and configure access to the telemetry information. This lab works with the simple application that consist of ASP.NET frontend, node.js backend and external dependencies.
+You'll learn how to create Application Insights resource for different components of your microservice and configure access to the telemetry information. This lab works with a simple application that consist of ASP.NET frontend, Node.JS backend and external dependencies.
 
 ![image](/instructions/architecture.png)
 
-###Task 1. Create Application Insights resources
+###Task 1. Create Application Insights Resources
 
-Create Application Insights resources. Azure allows setting access permissions on resource group level. So create each component in it's own resource group.
+Create Application Insights resources. Azure allows setting access permissions on resource group level. To demonstrate this scenario, each Application Insights component should be created in it's own resource group.
 
 1. Open Azure portal at [portal.azure.com](https://portal.azure.com)
 2. Press "+" sign in the left upper corner, type "Application Insights"
@@ -63,7 +63,7 @@ You may need to set up different levels of access for the microservice telemetry
 
 ###Task 3. Get application Insights instrumentation key
 
-Application Insights resource represents a bucket of telemetry. Instrumentation key identifies this bucket and needs to be sent alongside with all telemetry items. You'll need to get instrumentation key for the next excercise.
+Application Insights resource represents a telemetry container. Instrumentation key identifies this container and needs to be sent alongside with all telemetry items. You'll need to get instrumentation key for the next excercise.
 
 1. In search box in the top-middle of the screen type "backend", select backend Application Insights resource
 2. Expand "Essentials" section and copy instrumentation key 
@@ -72,7 +72,7 @@ Application Insights resource represents a bucket of telemetry. Instrumentation 
 
 ## Excercise 2. Configure components to collect telemetry
 
-Application Insights supports telemetry collection from many different languages and frameworks. It is important in microservices environment where every component may be written in it's language or the version of a platform. In this lab we will demo how to onboard JavaScript page, configure ASP.NET application and enable telemetry collection for the node.js application. 
+Application Insights supports telemetry collection for services written in many different languages and frameworks. It is important in micr-oservices environment where every service may be authored using different programming languages or framework version, for example you can have ASP.NET classic application communicating to ASP.NET Core application. In this lab we will demonstrate how to onboard JavaScript page, ASP.NET Core application and Node.JS application. 
 
 ### Task 1. Verify default applications not onboarded with AI
 
@@ -83,13 +83,13 @@ This machine comes with IIS configured to serve both components of the microserv
 
 ### Task 2. Onboard NODE.JS application (backend)
 
-Application Insights Node.JS SDK is one of the most popular. Enabling of Application Insights for node.js applications is very easy. You need to install npm package and bootstrap the SDK.  
+Application Insights Node.JS SDK is one of our most popular SDKs. Enabling of Application Insights for Node.JS applications is very easy. You need to install npm package and bootstrap the SDK.  
 
 1. Open command line 
-1. Type `cd src/start/node` to switch to the folder containing node.js application
+1. Type `cd src/start/node` to switch to the folder containing Node.JS application
 3. Run `npm install`. This command will install preconfigured `applicationinsights` npm package
-2. Get the **backend** compionent instrumentation key from the previous excercise
-3. Open `src/start/node/process.js` and insert immediately after other require declarations:
+2. Get the **backend** component instrumentation key from the previous excercise
+3. Open `src/start/node/process.js` and insert immediately after the existing require declarations:
 
     ``` node.js
     var appInsights = require("applicationinsights");
@@ -101,20 +101,21 @@ TODO: Insert screenshot here
 
 ### Task 3. Onboard ASP.NET application (frontend)
 
-There are many ways to enable Application Insights for ASP.NET application. In this lab the application already has Application Insights SDK enabled as it would be enabled by Visual Studio. The only modification you need to do is to configure the instrumentation key.
+There are many ways to enable Application Insights for ASP.NET application. In this lab the application already has Application Insights SDK enabled as it would be when creating an ASP.NET project in Visual Studio with Application Insights option checked. The only modification you need to do is to configure the instrumentation key.
 
 1. Get the **frontend** component instrumentation key from the first excercise 
-1. Open folder `src\start\aspnet\tr24ai\tr24ai\bin`
+2. Open folder `src\start\aspnet\tr24ai\tr24ai\bin`
 3. Open file `ApplicationInsights.config`
 4. Replace  `<!-- Insert instrumentation key here-->` with the instrumentation key from the step 1 `<InstrumentationKey>instrumentation_key_for_aspnet_app</InstrumentationKey>`
-5. Verify that you have frontend applicationis still running on HTTP port 24002 by running http://localhost:24002 in the browser
-6. Open **frontend** component in Azure portal. Live Stream tile should show 1 instance
+5. Repeat steps 3-4 for `ApplicationInsights.config` in `src\start\aspnet\tr24ai\tr24ai` folder.
+6. Verify that you have frontend applicationis still running on HTTP port 24002 by running http://localhost:24002 in the browser
+7. Open **frontend** component in Azure portal. Live Stream tile should show 1 instance
 
     ![image](/instructions/live-stream-frontend.png)
 
 ### Task 4. Enabling telemetry collection from the JavaScript (frontend)
 
-There is no reason to use the same instrumentation key for the JavaScript and server side components of the application. With the modern rich UI it is not rare that a single JavaScript UI has many backend dependencies and do not have a "main" frontend backend. In this lab however we will use the same instrumentation key for JavaScript and server side code of the front end component of our microservice.
+There is no reason to use the same instrumentation key for the JavaScript and server side components of the application. With modern rich UI it is not rare for a single JavaScript UI to have many backend dependencies and not have the "main" frontend backend. In this lab, however, we will use the same instrumentation key for JavaScript and server side code of the frontend component of our microservice.
 
 1. Get the **frontend** component instrumentation key from the first excercise 
 1. Open folder `\src\start\aspnet\tr24ai\tr24ai\Views\Home`
@@ -141,7 +142,7 @@ There is no reason to use the same instrumentation key for the JavaScript and se
 
 ## Excercise 3. Create a microservice dashboard
 
-When running a microservices it is important to have a single pane of glass view to the application behavior. Single view allows to see how performance degradation of one component affects other and how to see the load on all instances of your microservice. In this excercise we will create a dashboard combining basic information from both backend and frontend components.
+When running microservices it is important to have a single pane of glass view to the application behavior. Single view allows to see how performance degradation of one component affects other components and allows you to see the load on all instances of your microservice. In this excercise we will create a dashboard combining basic information from both backend and frontend components.
 
 ###Task 1. Create a new dashboard
 
@@ -157,7 +158,7 @@ Create an empty dashboard for your microservices application
 
 ###Task 2. Add performance charts to the dashboard
 
-One of the big problems in microservices is an operations overhead and overall system complexity. In some multi-layer scenarios it is easy to see how overall application performance degradation is distributed by layers by placing corresponding charts on top of each other.
+One of the big problems in microservices is operations overhead and overall system complexity. In multi-layer scenarios it is easy to see how overall application performance degradation is distributed by layers by placing corresponding charts on top of each other.
 
 1. Open **frontend** application by typing it's name in the search box.  
 2. Select "Performance" menu item to open performance blade:
@@ -178,7 +179,7 @@ One of the big problems in microservices is an operations overhead and overall s
 
 Viewing overall application topology is important for an overview dashboard.
 
-1. Open **frontend** application by typing it's name in the search box.  
+1. Open **frontend** application by typing its name in the search box.  
 2. Select "Application Map" menu item
 3. Pin Application Map to the dashboard by clicking 📌 (:pushpin:) button 
 5. Open default dashboard by clicking on "Microsoft Azure" title in the top left corner
@@ -201,7 +202,7 @@ Many performance issues may be solved by scaling components of the multi-service
 
     ![image](/instructions/dashboard-step5-final-dashboard.png)
 
-## Excercise 4. Configure Application Map
+## Excercise 4. Set up application map
 
 Application Map represents topology of your application. It shows health and performance metrics for incoming requests into your application, as well as for outgoing requests that your application is making. In this exercise you will learn how to use Application Map for basic scenarios, as well as how to configure cross-component correlation, which is an experiemental feature. 
 
@@ -261,7 +262,6 @@ Application Map represents topology of your application. It shows health and per
 4. Click on 📌 (:pushpin:) button in the top right corner to save the updated map to your dashboard. Close the blade and reload the page. Note that the map on the dashboard has preserved custom filter settings.
 
 ## Excercise 5. Find a bug/trace transactions
-
 Out of the box Application Insights allows to track the transaction execution accross the multiple layers. Application Insights is using the root-parent-self combination of telemetry item identifiers. In this excercise you'll learn how Application Insights correlate telemetry items and how cross-components correlation identifiers propagated across the layers.
 
 ###Task 1. Root-parent-self correlation concepts
