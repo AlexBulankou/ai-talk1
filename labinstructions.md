@@ -204,7 +204,145 @@ Many performance issues may be solved by scaling components of the multi-service
 
 ## Excercise 4. Set up application map
 
+Application Map represents topology of your application. It shows health and performance metrics for incoming requests into your application, as well as for outgoing requests that your application is making. In this exercise you will learn how to use Application Map for basic scenarios, as well as how to configure cross-component correlation, which is an experiemental feature. 
+
+###Task 1. View topology of backend application
+
+1. Open Application Map for **backend**. Observe that there are two nodes shown: server and node and remote dependency node. Note, that remote dependency node is showing signifficant percentage of failing calls, however these errors are not propagated to the callers of backend, because all requests are successful.
+
+    ![image](/instructions/appmap-be.PNG)
+
+2. Click on ``...`` button on ``finance.google.com`` remote dependency and open failed calls. See if there is anything unusual about the failing calls.
+3. Observe that there's a dependency call made for every call into **backend** component. Open ``Filters`` by clicking the button on Application Map header and apply the filter to only show responses with 204 status code. Note the ratio of 204 responses to 200 responses and compare it with the ratio of failing to successful dependency calls.
+
+    ![image](/instructions/appmap-be204.PNG)
+
+###Task 2. View topology of frontend application and diagnose a configuration issue.
+
+1. Open Application Map for **frontend**. Observe that there's Client and Server components shown on the map. 
+
+    ![image](/instructions/appmap-fe.PNG)
+    
+2. For Client component note that its status is shown as failing due to script errors detected on the page. Click on the red icon to open the script error view.
+3. Note that one of server-side dependencies, ``www.narayaniservices.com`` is showing 100% of failures. Click on ``...`` button to open failed calls. Try to understand the reason, why there hasn't be a single successful call, which for remote dependencies often indicates configuration error.
+4. Try to understand and fix the issue. Hint: open web.config for **frontend** application and review the URL specified as HeaderUrl.
+5. Once the issue is fixed you will start seeing successful dependencies appearing for ``www.narayaniservices.com``.
+
+###Task 3. View multi-server application map (experimental feature)
+
+1. This task uses experimental Application Map feature that is not yet available to everyone. To ensure you're loading the version of the portal with this feature enabled, reload the portal with the following link: https://portal.azure.com/?appInsightsExtension_OverrideSettings=appMapExperience:appMapLegacyErrorPaneMultiServer
+
+2.  Tag both **frontend** and **backend** applications with the same key:value pair. To add the tag, open Application Insights resource and click on Tags in the resource menu. In the Tags blade and key and value and click Save. Make sure to use the same tag key and value for both **frontend** and **backend**
+
+    ![image](/instructions/appmap-tags.PNG)
+
+3. Open Application Map for **backend** component and click Filters on the header to open Filters blade.
+4. Under tags section on the Filters blade, check the tag that you just added.
+
+    ![image](/instructions/appmap-tags-apply.PNG)
+
+5. Click ``Update`` to apply your changes and close Filters blade. Click ``Refresh`` on the Application Map header to see your changes. 
+6. You can now see **frontend** application appearing on Application Map alongside **backend** application.
+7. Select **backend** application node on the map. You will see incoming calls from **frontend** application.
+
+    ![image](/instructions/appmap-be-x.PNG)
+
+8. Now select **frontend** application node on the map. You will see outgoing calls to **backend** application. Spend some time studying how backend component is displayed in this view. It is showing both dependency metrics for the call originating from frontend component, as well as server metrics for the calls originating from all other potential callers into backend component.
+
+    ![image](/instructions/appmap-fe-x.PNG)
 
 
+###Task 4. Configure error thresholds, filters and pinning.
+1. Open Application Map for **frontend** component.
+2. Cick on Options button on the header to open Options pane. Try changing error and warning thresholds for Application Map so that all nodes appear green. Consider why in some cases thresholds should be adjusted to a higher level.
+3. Open Filters blade to filter the map by ``GET Home/Header`` operation. Apply your changes. Note how only dependencies that are invoked as part of this call are shown.
+
+    ![image](/instructions/appmap-fe-filter.PNG)
+    
+4. Click on 📌 (:pushpin:) button in the top right corner to save the updated map to your dashboard. Close the blade and reload the page. Note that the map on the dashboard has preserved custom filter settings.
 
 ## Excercise 5. Find a bug/trace transactions
+Out of the box Application Insights allows to track the transaction execution accross the multiple layers. Application Insights is using the root-parent-self combination of telemetry item identifiers. In this excercise you'll learn how Application Insights correlate telemetry items and how cross-components correlation identifiers propagated across the layers.
+
+###Task 1. Root-parent-self correlation concepts
+1. Open **frontend** application blade.
+2. Select the failed request by clicking on failed requests chart, than choosing "GET Home/Stock" request in the table and finally clicking on one of failed requests.
+
+    ![image](/instructions/select-stock-failed-request.png)
+
+3. Click on "..." to open all properties and type "id" in the filter.
+
+    ![image](/instructions/get-failed-request-correlation-id.png)
+
+4. Copy the Operation Id. In the screenshot above it has value `STYz`.
+5. Return to the **frontend** application overview blade and click "Analytics" in the top menu
+6. Type the analytics query:
+
+    ```
+    (requests | union dependencies | union pageViews) 
+    | where operation_Id == "STYz"
+    | project timestamp, itemType, name, id, operation_ParentId, operation_Id
+    ```
+7. In the result view note that all telemetry items share the "root" operation_Id. When ajax call made from the page - new unique id `qJSXU` assigned to the dependency telemetry and pageView's id is used as operation_ParentId. In turn server request uses ajax's id as a parent id.
+
+    | itemType   | name                      | id           | operation_ParentId | operation_Id |
+    |------------|---------------------------|--------------|--------------------|--------------|
+    | pageView   | TR24 AI for Microservices |              | STYz               | STYz         |
+    | dependency | GET /Home/Stock           | qJSXU        | STYz               | STYz         |
+    | request    | GET Home/Stock            | KqKwlrSt9PA= | qJSXU              | STYz         |
+    | dependency | GET /                     | bBrf2L7mm2g= | KqKwlrSt9PA=       | STYz         |
+
+
+###Task 2. Cross components correlation
+1. Open the failed request blade from the Task 1.
+
+    ![image](/instructions/get-failed-request-correlation-id.png)
+
+2. Failed request has a dependency call with the name `localhost | jQfGIonzN758c9rYzdlnz9Rsni8mTQ3DDnv60BtSdRg=`
+3. The id `jQfGIonzN758c9rYzdlnz9Rsni8mTQ3DDnv60BtSdRg=` represents SHA256 for the instrumentation key of **backend**. In the next versions of UI we will open the related component automatically. In this version of UI - copy the request operation Id.
+4. Open **backend** component
+5. Click on "Analytics" button
+6. Type the query 
+
+    ```
+    (requests | union dependencies) 
+    | where operation_Id == "STYz"
+    ```
+
+7. Single request telemetry item will be returned. You can see that it has a `source` field with the value `VahsfsNpv5z8PKnCLvB4+IZqyuiiyXfbC36J3k20ffc=`. It is a SHA256 of **frontend** component.
+
+###Task 3. Propagate correlation id thru http headers
+1. Open `src/start/node/process.js` and insert this code after appInsights object instantiation. This code will read the value of the header `x-ms-request-root-id` and assign it's value to the dependency telemetry item:
+
+``` js
+appInsights.client.addTelemetryProcessor((envelope, context) => {
+    if (envelope.data.baseType === "Microsoft.ApplicationInsights.RemoteDependencyData") {
+        var reqOptions = context["http.RequestOptions"];
+        // get the correlation id from headers
+        var id = reqOptions && reqOptions.headers && reqOptions.headers["x-ms-request-root-id"];
+        if (id !== undefined) {
+            // associate telemetry item with this correlaiton id
+            envelope.tags["ai.operation.id"] = id;
+        }
+    }
+    return true;
+});
+
+```
+2. Replace `http.get({ host: "finance.google.com", path: path + stock }, function (response) {` with the following lines. This will read the correlation id header from the incoming request and pass it to the http dependency call as http header:
+
+``` js
+// read the correlation header
+var id = req && req.headers && req.headers["x-ms-request-root-id"];
+
+// set the correlation header to the outgoing http request
+var headers = (id !== undefined) ? {"x-ms-request-root-id": id} : {};
+http.get({ host: "finance.google.com", path: path + stock, headers }, function (response) {
+```
+
+3. Restart IIS
+4. Open the latest request telemetry in **backend** application. See that it is correlation now with the dependency call:
+
+    ![image](/instructions/now-they-are-correlated.png)
+
+5. You may see that requests with the status code 204 will have a failed dependency calls inside.
