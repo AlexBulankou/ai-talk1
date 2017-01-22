@@ -262,11 +262,11 @@ Application Map represents topology of your application. It shows health and per
 4. Click on 📌 (:pushpin:) button in the top right corner to save the updated map to your dashboard. Close the blade and reload the page. Note that the map on the dashboard has preserved custom filter settings.
 
 ## Excercise 5. Find a bug/trace transactions
-Out of the box Application Insights allows to track the transaction execution accross the multiple layers. Application Insights is using the root-parent-self combination of telemetry item identifiers. In this excercise you'll learn how Application Insights correlate telemetry items and how cross-components correlation identifiers propagated across the layers.
+Out of the box Application Insights allows to track the transaction execution accross the multiple layers. Application Insights is using the root-parent-self combination of telemetry item identifiers. In this excercise you'll learn how Application Insights correlates telemetry items and how cross-components correlation identifiers are propagated across the layers.
 
 ###Task 1. Root-parent-self correlation concepts
 1. Open **frontend** application blade.
-2. Select the failed request by clicking on failed requests chart, than choosing "GET Home/Stock" request in the table and finally clicking on one of failed requests.
+2. Select a failed request by clicking on failed requests chart, then choosing "GET Home/Stock" request in the table, and, finally, clicking on one of failed requests.
 
     ![image](/instructions/select-stock-failed-request.png)
 
@@ -283,7 +283,7 @@ Out of the box Application Insights allows to track the transaction execution ac
     | where operation_Id == "STYz"
     | project timestamp, itemType, name, id, operation_ParentId, operation_Id
     ```
-7. In the result view note that all telemetry items share the "root" operation_Id. When ajax call made from the page - new unique id `qJSXU` assigned to the dependency telemetry and pageView's id is used as operation_ParentId. In turn server request uses ajax's id as a parent id.
+7. In the result view note that all telemetry items share the "root" operation_Id. When ajax call made from the page - new unique id `qJSXU` is assigned to the dependency telemetry and pageView's id is used as operation_ParentId. In turn server request uses ajax's id as parent id.
 
     | itemType   | name                      | id           | operation_ParentId | operation_Id |
     |------------|---------------------------|--------------|--------------------|--------------|
@@ -293,13 +293,13 @@ Out of the box Application Insights allows to track the transaction execution ac
     | dependency | GET /                     | bBrf2L7mm2g= | KqKwlrSt9PA=       | STYz         |
 
 
-###Task 2. Cross components correlation
+###Task 2. Cross-component correlation
 1. Open the failed request blade from the Task 1.
 
     ![image](/instructions/get-failed-request-correlation-id.png)
 
 2. Failed request has a dependency call with the name `localhost | jQfGIonzN758c9rYzdlnz9Rsni8mTQ3DDnv60BtSdRg=`
-3. The id `jQfGIonzN758c9rYzdlnz9Rsni8mTQ3DDnv60BtSdRg=` represents SHA256 for the instrumentation key of **backend**. In the next versions of UI we will open the related component automatically. In this version of UI - copy the request operation Id.
+3. The id `jQfGIonzN758c9rYzdlnz9Rsni8mTQ3DDnv60BtSdRg=` represents SHA256 for the instrumentation key of **backend** component. In the next versions of UI we will open the related component automatically. In this version of UI - copy the request operation Id.
 4. Open **backend** component
 5. Click on "Analytics" button
 6. Type the query 
@@ -311,18 +311,21 @@ Out of the box Application Insights allows to track the transaction execution ac
 
 7. Single request telemetry item will be returned. You can see that it has a `source` field with the value `VahsfsNpv5z8PKnCLvB4+IZqyuiiyXfbC36J3k20ffc=`. It is a SHA256 of **frontend** component.
 
-###Task 3. Propagate correlation id thru http headers
-1. Open `src/start/node/process.js` and insert this code after appInsights object instantiation. This code will read the value of the header `x-ms-request-root-id` and assign it's value to the dependency telemetry item:
+###Task 3. Propagate correlation id via http headers
+1. Open `src/start/node/process.js` and insert the following code snippet after appInsights object instantiation. It will read the value of the header `x-ms-request-root-id` and assign its value to the dependency telemetry item:
 
 ``` js
 appInsights.client.addTelemetryProcessor((envelope, context) => {
     if (envelope.data.baseType === "Microsoft.ApplicationInsights.RemoteDependencyData") {
         var reqOptions = context["http.RequestOptions"];
-        // get the correlation id from headers
-        var id = reqOptions && reqOptions.headers && reqOptions.headers["x-ms-request-root-id"];
-        if (id !== undefined) {
-            // associate telemetry item with this correlaiton id
-            envelope.tags["ai.operation.id"] = id;
+        // check if context object passed with telemetry initializer contains expected headers property
+        if (reqOptions && reqOptions.headers) {
+            // get the correlation id from headers
+            var id = reqOptions.headers["x-ms-request-root-id"];
+            if (id !== undefined) {
+                // associate telemetry item with this correlaiton id
+                envelope.tags["ai.operation.id"] = id;
+            }
         }
     }
     return true;
@@ -333,16 +336,20 @@ appInsights.client.addTelemetryProcessor((envelope, context) => {
 
 ``` js
 // read the correlation header
-var id = req && req.headers && req.headers["x-ms-request-root-id"];
+if (req && req.headers){
+    var id = req.headers["x-ms-request-root-id"];
 
-// set the correlation header to the outgoing http request
-var headers = (id !== undefined) ? {"x-ms-request-root-id": id} : {};
-http.get({ host: "finance.google.com", path: path + stock, headers }, function (response) {
+    // set the correlation header to the outgoing http request
+    var headers = (id !== undefined) ? {"x-ms-request-root-id": id} : {};
+    http.get({ host: "finance.google.com", path: path + stock, headers }, function (response) {
+    ...
+    });
+}
 ```
 
-3. Restart IIS
-4. Open the latest request telemetry in **backend** application. See that it is correlation now with the dependency call:
+3. Restart IIS.
+4. Open the latest request telemetry in **backend** application. See that requests now are correlated with dependency call:
 
     ![image](/instructions/now-they-are-correlated.png)
 
-5. You may see that requests with the status code 204 will have a failed dependency calls inside.
+5. Now you see that requests with the status code 204 have a failed dependency calls associated with them.
