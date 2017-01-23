@@ -86,10 +86,10 @@ This machine comes with IIS configured to serve both components of the microserv
 Application Insights Node.JS SDK is one of our most popular SDKs. Enabling of Application Insights for Node.JS applications is very easy. You need to install npm package and bootstrap the SDK.  
 
 1. Open command line 
-1. Type `cd src/start/node` to switch to the folder containing Node.JS application
+1. Type `cd C:\tr24\lab\src\start\node` to switch to the folder containing Node.JS application
 3. Run `npm install`. This command will install preconfigured `applicationinsights` npm package
 2. Get the **backend** component instrumentation key from the previous excercise
-3. Open `src/start/node/process.js` and insert immediately after the existing require declarations:
+3. Open `C:\tr24\lab\src\start\node\process.js` and insert immediately after the existing require declarations:
 
     ``` node.js
     var appInsights = require("applicationinsights");
@@ -104,7 +104,7 @@ TODO: Insert screenshot here
 There are many ways to enable Application Insights for ASP.NET application. In this lab the application already has Application Insights SDK enabled as it would be when creating an ASP.NET project in Visual Studio with Application Insights option checked. The only modification you need to do is to configure the instrumentation key.
 
 1. Get the **frontend** component instrumentation key from the first excercise 
-2. Open folder `src\start\aspnet\tr24ai\tr24ai\`
+2. Open folder `C:\tr24\lab\src\start\aspnet\tr24ai\tr24ai\`
 3. Open file `ApplicationInsights.config`
 4. Replace  `<!-- Insert instrumentation key here-->` with the instrumentation key from the step 1 `<InstrumentationKey>instrumentation_key_for_aspnet_app</InstrumentationKey>`
 5. Verify that you have frontend applicationis still running on HTTP port 24002 by running http://localhost:24002 in the browser
@@ -117,7 +117,7 @@ There are many ways to enable Application Insights for ASP.NET application. In t
 There is no reason to use the same instrumentation key for the JavaScript and server side components of the application. With modern rich UI it is not rare for a single JavaScript UI to have many backend dependencies and not have the "main" frontend backend. In this lab, however, we will use the same instrumentation key for JavaScript and server side code of the frontend component of our microservice.
 
 1. Get the **frontend** component instrumentation key from the first excercise 
-1. Open folder `\src\start\aspnet\tr24ai\tr24ai\Views\Home`
+1. Open folder `C:\tr24\lab\src\start\aspnet\tr24ai\tr24ai\Views\Home`
 2. For the both files - `Details.cshtml` and `Index.cshtml`:
     
     1. Open file
@@ -311,7 +311,7 @@ Out of the box Application Insights allows to track the transaction execution ac
 7. Single request telemetry item will be returned. You can see that it has a `source` field with the value `VahsfsNpv5z8PKnCLvB4+IZqyuiiyXfbC36J3k20ffc=`. It is a SHA256 of **frontend** component.
 
 ###Task 3. Propagate correlation id via http headers
-1. Open `src/start/node/process.js` and insert the following code snippet after appInsights object instantiation. It will read the value of the header `x-ms-request-root-id` and assign its value to the dependency telemetry item:
+1. Open `C:\tr24\lab\src\start\node\process.js` and insert the following code snippet after appInsights object instantiation. It will read the value of the header `x-ms-request-root-id` and assign its value to the dependency telemetry item:
 
 ``` js
 appInsights.client.addTelemetryProcessor(function(envelope, context){
