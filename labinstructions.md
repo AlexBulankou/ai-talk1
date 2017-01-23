@@ -315,7 +315,7 @@ Out of the box Application Insights allows to track the transaction execution ac
 1. Open `src/start/node/process.js` and insert the following code snippet after appInsights object instantiation. It will read the value of the header `x-ms-request-root-id` and assign its value to the dependency telemetry item:
 
 ``` js
-appInsights.client.addTelemetryProcessor((envelope, context) => {
+appInsights.client.addTelemetryProcessor(function(envelope, context){
     if (envelope.data.baseType === "Microsoft.ApplicationInsights.RemoteDependencyData") {
         var reqOptions = context["http.RequestOptions"];
         // check if context object passed with telemetry initializer contains expected headers property
@@ -336,12 +336,14 @@ appInsights.client.addTelemetryProcessor((envelope, context) => {
 
 ``` js
 // read the correlation header
-if (req && req.headers){
-    var id = req.headers["x-ms-request-root-id"];
+    var id = undefined;
+    if (req && req.headers){
+        id = req.headers["x-ms-request-root-id"];
+    }
 
     // set the correlation header to the outgoing http request
     var headers = (id !== undefined) ? {"x-ms-request-root-id": id} : {};
-    http.get({ host: "finance.google.com", path: path + stock, headers }, function (response) {
+    http.get({ host: "finance.google.com", path: path + stock, headers: headers }, function (response) {
     ...
     });
 }
