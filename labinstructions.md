@@ -104,12 +104,11 @@ TODO: Insert screenshot here
 There are many ways to enable Application Insights for ASP.NET application. In this lab the application already has Application Insights SDK enabled as it would be when creating an ASP.NET project in Visual Studio with Application Insights option checked. The only modification you need to do is to configure the instrumentation key.
 
 1. Get the **frontend** component instrumentation key from the first excercise 
-2. Open folder `src\start\aspnet\tr24ai\tr24ai\bin`
+2. Open folder `src\start\aspnet\tr24ai\tr24ai\`
 3. Open file `ApplicationInsights.config`
 4. Replace  `<!-- Insert instrumentation key here-->` with the instrumentation key from the step 1 `<InstrumentationKey>instrumentation_key_for_aspnet_app</InstrumentationKey>`
-5. Repeat steps 3-4 for `ApplicationInsights.config` in `src\start\aspnet\tr24ai\tr24ai` folder.
-6. Verify that you have frontend applicationis still running on HTTP port 24002 by running http://localhost:24002 in the browser
-7. Open **frontend** component in Azure portal. Live Stream tile should show 1 instance
+5. Verify that you have frontend applicationis still running on HTTP port 24002 by running http://localhost:24002 in the browser
+6. Open **frontend** component in Azure portal. Live Stream tile should show 1 instance
 
     ![image](/instructions/live-stream-frontend.png)
 
