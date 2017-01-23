@@ -1,0 +1,9 @@
+// read the correlation header
+var id = undefined;
+if (req && req.headers){
+    id = req.headers["x-ms-request-root-id"];
+}
+
+// set the correlation header to the outgoing http request
+var headers = (id !== undefined) ? {"x-ms-request-root-id": id} : {};
+http.get({ host: "finance.google.com", path: path + stock, headers: headers }, function (response) {
