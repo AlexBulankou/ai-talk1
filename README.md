@@ -22,7 +22,9 @@ If your solution consists of multiple services communicating to each other, you 
 - Install [Status Monitor](http://go.microsoft.com/fwlink/?LinkID=522371&clcid=0x409), restart IIS
 - Create website in IIS and point it to `\src\start\node` directory
   - Use HTTP and port 24001
+
   ![img](/instructions/1.PNG)
+  
 - Create website in IIS and point it to `src\start\aspnet\tr24ai\tr24ai` directory
   - Use HTTP and port 24002
 - Load website: http://localhost:24002/
