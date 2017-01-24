@@ -116,12 +116,13 @@ There are many ways to enable Application Insights for ASP.NET application. In t
 2. Open folder `C:\tr24\lab\src\start\aspnet\tr24ai\tr24ai\`
 3. Open file `ApplicationInsights.config`
 4. Replace  `<!-- Insert instrumentation key here-->` with the instrumentation key from the step 1 `<InstrumentationKey>instrumentation_key_for_aspnet_app</InstrumentationKey>`
-5. Verify that you have frontend applicationis still running on HTTP port 24002 by running [http://localhost:24002](http://localhost:24002) in the browser
-6. Open **frontend** component in Azure portal. Live Stream tile should show 1 instance
+5. From Administrator comman line, run `iisreset` command.
+6. Verify that you have frontend applicationis still running on HTTP port 24002 by running [http://localhost:24002](http://localhost:24002) in the browser
+7. Open **frontend** component in Azure portal. Live Stream tile should show 1 instance
 
     ![image](/instructions/live-stream-frontend.png)
 
-7. Click on live stream button to see Application Insights telemetry in realtime.
+8. Click on live stream button to see Application Insights telemetry in realtime.
 
 ### Task 4. Enabling telemetry collection from the JavaScript (frontend)
 
@@ -150,6 +151,7 @@ There is no reason to use the same instrumentation key for the JavaScript and se
     4. Replace `instrumentation_key_for_aspnet_app` in the inserted snippet to the actual instrumentation key
 
 3. Open [http://localhost:24002](http://localhost:24002) in the browser and click couple links to generate some telemetry. It takes some time for telemetry to show up on server. You'll see telemetry from JavaScript in the next exercise.
+4. With Chrome browser, install auto-refresh extension from here: https://chrome.google.com/webstore/detail/auto-refresh/ifooldnmmcmlbdennkpdnlnbgbmfalko?hl=en-US and configure it to refresh http://localhost:24002/Home/Details?stock=msft every 3 seconds. This way you generate telemetry.
 
 ## Excercise 3. Create a microservice dashboard
 
