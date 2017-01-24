@@ -203,9 +203,9 @@ Viewing overall application topology is important for an overview dashboard.
 
 Many performance issues may be solved by scaling components of the multi-service application. You need to see the current state of every instace of your application.
 
-1. Open **frontend** application by typing it's name in the search box.  
+1. Open **frontend** application by typing it's name in the search box
 2. Select "Servers" menu item to open servers blade
-3. Servers blade shows charts and the list of instances this component it running on
+3. Servers blade shows charts and the list of instances this component it running on. List for **frontend** will be empty as lab machine was set up with the permissions issues. You will see list in **backend** application
 4. Click  📌 (:pushpin:) button in the right top corner of the servers list to pin this list to the dashboard
 
     ![image](/instructions/dashboard-step4-pin-servers-list.png)
