@@ -45,6 +45,8 @@ Create Application Insights resources. Azure allows setting access permissions o
   3. Resource Group -> Create new: **backend**
   4. Location: **South Central US**
 
+6. Every Application Inisghts resource represent a micro-service in your solution. There may be different teams owning **frontend** and **backend** micro-services. Let's set up special permissions for **backend** component.
+
 ###Task 2. Set up permissions for backend service
 
 You may need to set up different levels of access for the microservice telemetry for different teams in your organization. This is how you can set permission for backend service. 
@@ -61,6 +63,8 @@ You may need to set up different levels of access for the microservice telemetry
 
     ![image](/instructions/resource-group-add-role.png)
 
+4. Azure allows set up complex role-based permissions to all resources including Application Insights.
+
 ###Task 3. Get application Insights instrumentation key
 
 Application Insights resource represents a telemetry container. Instrumentation key identifies this container and needs to be sent alongside with all telemetry items. You'll need to get instrumentation key for the next excercise.
@@ -69,6 +73,8 @@ Application Insights resource represents a telemetry container. Instrumentation 
 2. Expand "Essentials" section and copy instrumentation key 
 
     ![image](/instructions/save-instrumentation-key-backend.png)
+
+3. Instrumentation key is a telemetry identifier that allows to associate telemetry with a given micro-service.
 
 ## Excercise 2. Configure components to collect telemetry
 
@@ -83,6 +89,7 @@ This machine comes with IIS configured to serve both components of the microserv
 3. Type `git pull`
 3. Verify that you have frontend application is running on HTTP port 24002 by running [http://localhost:24002](http://localhost:24002) in the browser
 4. Verify that you have backend application is running on HTTP port 24001 by running [http://localhost:24001/?stock=msft](http://localhost:24001/?stock=msft)
+5. Now let's onboard applications to Application Insights
 
 ### Task 2. Onboard NODE.JS application (backend)
 
@@ -98,7 +105,8 @@ Application Insights Node.JS SDK is one of our most popular SDKs. Enabling of Ap
     var appInsights = require("applicationinsights");
     appInsights.setup("<instrumentation_key_for_node_app>").start();
     ```
-4. Verify that you have backend application is still running on HTTP port 24001 by running [http://localhost:24001/?stock=msft](http://localhost:24001/?stock=msft)
+
+4. Verify that you have backend application is still running on HTTP port 24001 by running [http://localhost:24001/?stock=msft](http://localhost:24001/?stock=msft). Telemetry for node.js application will show up in Azure portal ~1 minute. Meanwhile - let's configure other components.
 
 ### Task 3. Onboard ASP.NET application (frontend)
 
@@ -112,6 +120,8 @@ There are many ways to enable Application Insights for ASP.NET application. In t
 6. Open **frontend** component in Azure portal. Live Stream tile should show 1 instance
 
     ![image](/instructions/live-stream-frontend.png)
+
+7. Click on live stream button to see Application Insights telemetry in realtime.
 
 ### Task 4. Enabling telemetry collection from the JavaScript (frontend)
 
@@ -156,6 +166,7 @@ Create an empty dashboard for your microservices application
 
     ![image](/instructions/dashboard-step1.png)
 
+5. This dashboard will combine telemetry for all micro-services in your solution.
 
 ###Task 2. Add performance charts to the dashboard
 
@@ -186,7 +197,7 @@ Viewing overall application topology is important for an overview dashboard.
 2. Select "Application Map" menu item
 3. Pin Application Map to the dashboard by clicking 📌 (:pushpin:) button 
 5. Open default dashboard by clicking on "Microsoft Azure" title in the top left corner
-5. You should see performance charts and application map on the same dashboard
+5. You should see performance charts and application map on the same dashboard. Application Map gives at a glance view on micro-services intercommunication.
 
 ###Task 4. View instances data on dashboard
 
