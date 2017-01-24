@@ -246,7 +246,7 @@ Application Map represents topology of your application. It shows health and per
 
 ###Task 3. View multi-server application map (experimental feature)
 
-1. This task uses experimental Application Map feature that is not yet available to everyone. To ensure you're loading the version of the portal with this feature enabled, reload the portal with the following link: https://portal.azure.com/?appInsightsExtension_OverrideSettings=appMapExperience:appMapLegacyErrorPaneMultiServer
+1. This task uses experimental Application Map feature that is not yet available to everyone. To ensure you're loading the version of the portal with this feature enabled, reload the portal with the following link: https://aka.ms/apcc (short for https://portal.azure.com/?appInsightsExtension_OverrideSettings=appMapExperience:appMapLegacyErrorPaneMultiServer)
 
 2.  Tag both **frontend** and **backend** applications with the same key:value pair. To add the tag, open Application Insights resource and click on Tags in the resource menu. In the Tags blade and key and value and click Save. Make sure to use the same tag key and value for both **frontend** and **backend**
 
