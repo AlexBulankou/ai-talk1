@@ -11,16 +11,21 @@ If your solution consists of multiple services communicating to each other, you 
 - Understand how I can add Application Insights custom telemetry to my application to streamline my investigations.
 
 ## Setup VM
+- Install [GIT for Windows](https://git-scm.com/download/win)
 - Sync sources
-- Install GIT for Windows
-- Install latest Node.js build for Windows
-- Install URL Rewrite
+  - `cd c:\tr24\`
+  - `git clone https://github.com/AlexBulankou/ai-talk1.git lab`
+  - `cd lab`
+- Install [latest Node.js](https://nodejs.org/en/download/) build for Windows
+- Install [URL Rewrite](http://www.microsoft.com/web/handlers/webpi.ashx?command=getinstallerredirect&appid=urlrewrite2)
 - Install iisnode for IIS 7.x/8.x: [x86](https://github.com/azure/iisnode/releases/download/v0.2.21/iisnode-full-v0.2.21-x86.msi) or [x64](https://github.com/azure/iisnode/releases/download/v0.2.21/iisnode-full-v0.2.21-x64.msi) - choose bitness matching your system
 - Install [Status Monitor](http://go.microsoft.com/fwlink/?LinkID=522371&clcid=0x409), restart IIS
-- Create website in IIS and point it to \src\start\node directory
+- Create website in IIS and point it to `\src\start\node` directory
   - Use HTTP and port 24001
+
   ![img](/instructions/1.PNG)
-- Create website in IIS and point it to src\start\aspnet\tr24ai\tr24ai directory
+  
+- Create website in IIS and point it to `src\start\aspnet\tr24ai\tr24ai` directory
   - Use HTTP and port 24002
 - Load website: http://localhost:24002/
 
