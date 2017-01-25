@@ -224,12 +224,12 @@ Application Map represents topology of your application. It shows health and per
 
 ###Task 1. View topology of backend application
 
-1. Open Application Map for **backend**. Observe that there are two nodes shown: server and node and remote dependency node. Note, that remote dependency node is showing signifficant percentage of failing calls, however these errors are not propagated to the callers of backend, because all requests are successful.
+1. Open Application Map for **backend**. Observe that there are two nodes shown: server and node and remote dependency node. (Depending on the version of the ApplicationMap you might sometimes see interim HTTP grouping node). Note, that remote dependency node is showing signifficant percentage of failing calls, however these errors are not propagated to the callers of backend, because all requests are successful.
 
     ![image](/instructions/appmap-be.PNG)
 
-2. Click on ``...`` button on ``finance.google.com`` remote dependency and open failed calls. See if there is anything unusual about the failing calls.
-3. Observe that there's a dependency call made for every call into **backend** component. Open ``Filters`` by clicking the button on Application Map header and apply the filter to only show responses with 204 status code. Note the ratio of 204 responses to 200 responses and compare it with the ratio of failing to successful dependency calls.
+
+2. Observe that there's a dependency call made for every call into **backend** component, so there are the same number of dependency calls as requests. Open ``Filters`` by clicking the button on Application Map header. Note the ratio of 204 responses to 200 responses and compare it with the ratio of failing to successful dependency calls. You can see that every 204 response is caused by failing dependency. In the future, we'll be improving application map, so that filtering by dependency response and or by request response code only shows correlated requests and dependency, so this analysis will be easier. In Exercise 5 of this lab, we'll come back to diagnosing this issue further.
 
     ![image](/instructions/appmap-be204.PNG)
 
@@ -239,21 +239,37 @@ Application Map represents topology of your application. It shows health and per
 
     ![image](/instructions/appmap-fe.PNG)
     
-2. For Client component note that its status is shown as failing due to script errors detected on the page. Click on the red icon to open the script error view.
-3. Note that one of server-side dependencies, ``www.narayaniservices.com`` is showing 100% of failures. Click on ``...`` button to open failed calls. Try to understand the reason, why there hasn't be a single successful call, which for remote dependencies often indicates configuration error.
-4. Try to understand and fix the issue. Hint: open web.config for **frontend** application and review the URL specified as HeaderUrl.
+2. For Client component note that its status is shown as failing due to script errors detected on the page. Click on the red icon to open the script error view. Note that script error that is causing issues on the client side.
+
+    ![image](/instructions/scriptError.PNG)
+
+3. Note that one of server-side dependencies, ``www.narayaniservices.com`` is showing 100% of failures. Click on ``...`` button to open failed calls, click on ``false`` to open the blade with dependency call samples and then click on of them to see dependency details page. Note that path http://www.narayaniservices.com/images/header-img-rfp.jp is not a valid image url:
+
+    ![image](/instructions/invalidUrl.PNG)
+
+4. Open web.config for **frontend** application and correct the URL specified as HeaderUrl by changing it to http://www.narayaniservices.com/images/header-img-rfp.jpg. Navigate to http://localhost:24002/Home/Details?stock=msft and validate that header is now appearing as expected.
 5. Once the issue is fixed you will start seeing successful dependencies appearing for ``www.narayaniservices.com``.
 
-###Task 3. View multi-server application map (experimental feature)
 
-1. This task uses experimental Application Map feature that is not yet available to everyone. To ensure you're loading the version of the portal with this feature enabled, reload the portal with the following link: https://aka.ms/apcc (short for https://portal.azure.com/?appInsightsExtension_OverrideSettings=appMapExperience:appMapLegacyErrorPaneMultiServer)
+###Task 3. Configure error thresholds, filters and pinning.
+1. Open Application Map for **frontend** component.
+2. Cick on Options button on the header to open Options pane. Try changing error and warning thresholds for Application Map so that all nodes appear green. Consider why in some cases thresholds should be adjusted to a higher level.
+3. Open Filters blade to filter the map by ``GET Home/Header`` operation. Apply your changes. Note how only dependencies that are invoked as part of this call are shown.
+
+    ![image](/instructions/appmap-fe-filter.PNG)
+    
+4. Click on 📌 (:pushpin:) button in the top right corner to save the updated map to your dashboard. Close the blade and reload the page. Note that the map on the dashboard has preserved custom filter settings.
+
+###Task 4. View multi-server application map (experimental feature, if time permits)
+
+1. This task uses experimental Application Map feature that is not yet available to everyone. To ensure you're loading the version of the portal with this feature enabled, reload the portal with the following link: https://aka.ms/apcc (short for https://portal.azure.com/?appInsightsExtension_OverrideSettings=appMapExperience:appMapLegacyErrorPaneMultiServer) Please note that screenshots in this lab manual may not be the same as the latest visuals in the product.
 
 2.  Tag both **frontend** and **backend** applications with the same key:value pair. To add the tag, open Application Insights resource and click on Tags in the resource menu. In the Tags blade and key and value and click Save. Make sure to use the same tag key and value for both **frontend** and **backend**
 
     ![image](/instructions/appmap-tags.PNG)
 
 3. Open Application Map for **backend** component and click Filters on the header to open Filters blade.
-4. Under tags section on the Filters blade, check the tag that you just added.
+4. Under tags section on the Filters blade, check the tag that you just added. Uncheck ``Show current resource group`` and ``Show dependencies`` under ``Resources``.
 
     ![image](/instructions/appmap-tags-apply.PNG)
 
@@ -266,16 +282,6 @@ Application Map represents topology of your application. It shows health and per
 8. Now select **frontend** application node on the map. You will see outgoing calls to **backend** application. Spend some time studying how backend component is displayed in this view. It is showing both dependency metrics for the call originating from frontend component, as well as server metrics for the calls originating from all other potential callers into backend component.
 
     ![image](/instructions/appmap-fe-x.PNG)
-
-
-###Task 4. Configure error thresholds, filters and pinning.
-1. Open Application Map for **frontend** component.
-2. Cick on Options button on the header to open Options pane. Try changing error and warning thresholds for Application Map so that all nodes appear green. Consider why in some cases thresholds should be adjusted to a higher level.
-3. Open Filters blade to filter the map by ``GET Home/Header`` operation. Apply your changes. Note how only dependencies that are invoked as part of this call are shown.
-
-    ![image](/instructions/appmap-fe-filter.PNG)
-    
-4. Click on 📌 (:pushpin:) button in the top right corner to save the updated map to your dashboard. Close the blade and reload the page. Note that the map on the dashboard has preserved custom filter settings.
 
 ## Excercise 5. Find a bug/trace transactions
 Out of the box Application Insights allows to track the transaction execution accross the multiple layers. Application Insights is using the root-parent-self combination of telemetry item identifiers. In this excercise you'll learn how Application Insights correlates telemetry items and how cross-components correlation identifiers are propagated across the layers.
