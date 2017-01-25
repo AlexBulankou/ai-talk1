@@ -2,7 +2,7 @@
 
 ##Introduction
 
-In the modern world micro-services architecture allows to increase development agility and time to market. With the micro-services simplicity and high independance you can employ "the best tool for the job" for every service and for every situation.. Continuous delivery and DevOps practices make development and releases of individual services easy and straightforward.   
+In the modern world micro-services architecture allows to increase development agility and time to market. With the micro-services simplicity and high independance you can employ "the best tool for the job" for every service and for every situation. Continuous delivery and DevOps practices make development and releases of individual services easy and straightforward.   
 
 At the same time, micro-services architecture comes at a price of: 
 
@@ -45,6 +45,8 @@ Create Application Insights resources. Azure allows setting access permissions o
   3. Resource Group -> Create new: **backend**
   4. Location: **South Central US**
 
+6. Every Application Inisghts resource represent a micro-service in your solution. There may be different teams owning **frontend** and **backend** micro-services. Let's set up special permissions for **backend** component.
+
 ###Task 2. Set up permissions for backend service
 
 You may need to set up different levels of access for the microservice telemetry for different teams in your organization. This is how you can set permission for backend service. 
@@ -61,6 +63,8 @@ You may need to set up different levels of access for the microservice telemetry
 
     ![image](/instructions/resource-group-add-role.png)
 
+4. Azure allows set up complex role-based permissions to all resources including Application Insights.
+
 ###Task 3. Get application Insights instrumentation key
 
 Application Insights resource represents a telemetry container. Instrumentation key identifies this container and needs to be sent alongside with all telemetry items. You'll need to get instrumentation key for the next excercise.
@@ -70,55 +74,61 @@ Application Insights resource represents a telemetry container. Instrumentation 
 
     ![image](/instructions/save-instrumentation-key-backend.png)
 
+3. Instrumentation key is a telemetry identifier that allows to associate telemetry with a given micro-service.
+
 ## Excercise 2. Configure components to collect telemetry
 
-Application Insights supports telemetry collection for services written in many different languages and frameworks. It is important in micr-oservices environment where every service may be authored using different programming languages or framework version, for example you can have ASP.NET classic application communicating to ASP.NET Core application. In this lab we will demonstrate how to onboard JavaScript page, ASP.NET Core application and Node.JS application. 
+Application Insights supports telemetry collection for services written in many different languages and frameworks. It is important in micro-services environment where every service may be authored using different programming languages or framework version. In this lab we will demonstrate how to onboard JavaScript page, ASP.NET and Node.JS application. 
 
 ### Task 1. Verify default applications not onboarded with AI
 
 This machine comes with IIS configured to serve both components of the microservice.
 
-1. Verify that you have frontend application is running on HTTP port 24002 by running http://localhost:24002 in the browser
-2. Verify that you have backend application is running on HTTP port 24001 by running http://localhost:24001/?stock=msft 
+1. Open command line 
+2. Type `cd C:\tr24\lab`
+3. Type `git pull`
+3. Verify that you have frontend application is running on HTTP port 24002 by running [http://localhost:24002](http://localhost:24002) in the browser
+4. Verify that you have backend application is running on HTTP port 24001 by running [http://localhost:24001/?stock=msft](http://localhost:24001/?stock=msft)
+5. Now let's onboard applications to Application Insights
 
 ### Task 2. Onboard NODE.JS application (backend)
 
 Application Insights Node.JS SDK is one of our most popular SDKs. Enabling of Application Insights for Node.JS applications is very easy. You need to install npm package and bootstrap the SDK.  
 
 1. Open command line 
-1. Type `cd src/start/node` to switch to the folder containing Node.JS application
+1. Type `cd C:\tr24\lab\src\start\node` to switch to the folder containing Node.JS application
 3. Run `npm install`. This command will install preconfigured `applicationinsights` npm package
 2. Get the **backend** component instrumentation key from the previous excercise
-3. Open `src/start/node/process.js` and insert immediately after the existing require declarations:
+3. Open `C:\tr24\lab\src\start\node\process.js` (you can type `code process.js` in command window) and insert immediately after the existing require declarations:
 
     ``` node.js
     var appInsights = require("applicationinsights");
     appInsights.setup("<instrumentation_key_for_node_app>").start();
     ```
-4. Verify that you have backend application is still running on HTTP port 24001 by running http://localhost:24001/?stock=msft 
 
-TODO: Insert screenshot here
+4. Verify that you have backend application is still running on HTTP port 24001 by running [http://localhost:24001/?stock=msft](http://localhost:24001/?stock=msft). Telemetry for node.js application will show up in Azure portal ~1 minute. Meanwhile - let's configure other components.
 
 ### Task 3. Onboard ASP.NET application (frontend)
 
 There are many ways to enable Application Insights for ASP.NET application. In this lab the application already has Application Insights SDK enabled as it would be when creating an ASP.NET project in Visual Studio with Application Insights option checked. The only modification you need to do is to configure the instrumentation key.
 
 1. Get the **frontend** component instrumentation key from the first excercise 
-2. Open folder `src\start\aspnet\tr24ai\tr24ai\bin`
+2. Open folder `C:\tr24\lab\src\start\aspnet\tr24ai\tr24ai\`
 3. Open file `ApplicationInsights.config`
 4. Replace  `<!-- Insert instrumentation key here-->` with the instrumentation key from the step 1 `<InstrumentationKey>instrumentation_key_for_aspnet_app</InstrumentationKey>`
-5. Repeat steps 3-4 for `ApplicationInsights.config` in `src\start\aspnet\tr24ai\tr24ai` folder.
-6. Verify that you have frontend applicationis still running on HTTP port 24002 by running http://localhost:24002 in the browser
-7. Open **frontend** component in Azure portal. Live Stream tile should show 1 instance
+5. Verify that you have frontend applicationis still running on HTTP port 24002 by running [http://localhost:24002](http://localhost:24002) in the browser
+6. Open **frontend** component in Azure portal. Live Stream tile should show 1 instance
 
     ![image](/instructions/live-stream-frontend.png)
+
+7. Click on live stream button to see Application Insights telemetry in realtime.
 
 ### Task 4. Enabling telemetry collection from the JavaScript (frontend)
 
 There is no reason to use the same instrumentation key for the JavaScript and server side components of the application. With modern rich UI it is not rare for a single JavaScript UI to have many backend dependencies and not have the "main" frontend backend. In this lab, however, we will use the same instrumentation key for JavaScript and server side code of the frontend component of our microservice.
 
 1. Get the **frontend** component instrumentation key from the first excercise 
-1. Open folder `\src\start\aspnet\tr24ai\tr24ai\Views\Home`
+1. Open folder `C:\tr24\lab\src\start\aspnet\tr24ai\tr24ai\Views\Home`
 2. For the both files - `Details.cshtml` and `Index.cshtml`:
     
     1. Open file
@@ -139,6 +149,7 @@ There is no reason to use the same instrumentation key for the JavaScript and se
     ```
     4. Replace `instrumentation_key_for_aspnet_app` in the inserted snippet to the actual instrumentation key
 
+3. Open [http://localhost:24002](http://localhost:24002) in the browser and click couple links to generate some telemetry. It takes some time for telemetry to show up on server. You'll see telemetry from JavaScript in the next exercise.
 
 ## Excercise 3. Create a microservice dashboard
 
@@ -155,6 +166,7 @@ Create an empty dashboard for your microservices application
 
     ![image](/instructions/dashboard-step1.png)
 
+5. This dashboard will combine telemetry for all micro-services in your solution.
 
 ###Task 2. Add performance charts to the dashboard
 
@@ -175,6 +187,8 @@ One of the big problems in microservices is operations overhead and overall syst
 
     ![image](/instructions/dashboard-step3-performance-view.png)
 
+7. Note, in the screenshot above frontend avarage execution time is `384 ms`, backend execution time is `346 ms`. You can clearly see that backend execution is a bottleneck.
+
 ###Task 3. Add application map to the dashboard
 
 Viewing overall application topology is important for an overview dashboard.
@@ -183,15 +197,15 @@ Viewing overall application topology is important for an overview dashboard.
 2. Select "Application Map" menu item
 3. Pin Application Map to the dashboard by clicking 📌 (:pushpin:) button 
 5. Open default dashboard by clicking on "Microsoft Azure" title in the top left corner
-5. You should see performance charts and application map on the same dashboard
+5. You should see performance charts and application map on the same dashboard. Application Map gives at a glance view on micro-services intercommunication.
 
 ###Task 4. View instances data on dashboard
 
 Many performance issues may be solved by scaling components of the multi-service application. You need to see the current state of every instace of your application.
 
-1. Open **frontend** application by typing it's name in the search box.  
+1. Open **frontend** application by typing it's name in the search box
 2. Select "Servers" menu item to open servers blade
-3. Servers blade shows charts and the list of instances this component it running on
+3. Servers blade shows charts and the list of instances this component it running on. List for **frontend** will be empty as lab machine was set up with the permissions issues. You will see list in **backend** application
 4. Click  📌 (:pushpin:) button in the right top corner of the servers list to pin this list to the dashboard
 
     ![image](/instructions/dashboard-step4-pin-servers-list.png)
@@ -201,6 +215,8 @@ Many performance issues may be solved by scaling components of the multi-service
 6. Drag and drop charts to place servers lists one on top of another
 
     ![image](/instructions/dashboard-step5-final-dashboard.png)
+
+7. You can see how many instances of every components is currently running and how much CPU they consume. So you make a decision to scale up or down if necessary.
 
 ## Excercise 4. Set up application map
 
@@ -230,7 +246,7 @@ Application Map represents topology of your application. It shows health and per
 
 ###Task 3. View multi-server application map (experimental feature)
 
-1. This task uses experimental Application Map feature that is not yet available to everyone. To ensure you're loading the version of the portal with this feature enabled, reload the portal with the following link: https://portal.azure.com/?appInsightsExtension_OverrideSettings=appMapExperience:appMapLegacyErrorPaneMultiServer
+1. This task uses experimental Application Map feature that is not yet available to everyone. To ensure you're loading the version of the portal with this feature enabled, reload the portal with the following link: https://aka.ms/apcc (short for https://portal.azure.com/?appInsightsExtension_OverrideSettings=appMapExperience:appMapLegacyErrorPaneMultiServer)
 
 2.  Tag both **frontend** and **backend** applications with the same key:value pair. To add the tag, open Application Insights resource and click on Tags in the resource menu. In the Tags blade and key and value and click Save. Make sure to use the same tag key and value for both **frontend** and **backend**
 
@@ -312,44 +328,44 @@ Out of the box Application Insights allows to track the transaction execution ac
 7. Single request telemetry item will be returned. You can see that it has a `source` field with the value `VahsfsNpv5z8PKnCLvB4+IZqyuiiyXfbC36J3k20ffc=`. It is a SHA256 of **frontend** component.
 
 ###Task 3. Propagate correlation id via http headers
-1. Open `src/start/node/process.js` and insert the following code snippet after appInsights object instantiation. It will read the value of the header `x-ms-request-root-id` and assign its value to the dependency telemetry item:
+1. Open `C:\tr24\lab\src\start\node\process.js` and insert the following code snippet after appInsights object instantiation. It will read the value of the header `x-ms-request-root-id` and assign its value to the dependency telemetry item:
 
-``` js
-appInsights.client.addTelemetryProcessor((envelope, context) => {
-    if (envelope.data.baseType === "Microsoft.ApplicationInsights.RemoteDependencyData") {
-        var reqOptions = context["http.RequestOptions"];
-        // check if context object passed with telemetry initializer contains expected headers property
-        if (reqOptions && reqOptions.headers) {
-            // get the correlation id from headers
-            var id = reqOptions.headers["x-ms-request-root-id"];
-            if (id !== undefined) {
-                // associate telemetry item with this correlaiton id
-                envelope.tags["ai.operation.id"] = id;
+    ``` js
+    appInsights.client.addTelemetryProcessor(function(envelope, context){
+        if (envelope.data.baseType === "Microsoft.ApplicationInsights.RemoteDependencyData") {
+            var reqOptions = context["http.RequestOptions"];
+            // check if context object passed with telemetry initializer contains expected headers property
+            if (reqOptions && reqOptions.headers) {
+                // get the correlation id from headers
+                var id = reqOptions.headers["x-ms-request-root-id"];
+                if (id !== undefined) {
+                    // associate telemetry item with this correlaiton id
+                    envelope.tags["ai.operation.id"] = id;
+                }
             }
         }
-    }
-    return true;
-});
+        return true;
+    });
 
-```
+    ```
 2. Replace `http.get({ host: "finance.google.com", path: path + stock }, function (response) {` with the following lines. This will read the correlation id header from the incoming request and pass it to the http dependency call as http header:
 
-``` js
-// read the correlation header
-if (req && req.headers){
-    var id = req.headers["x-ms-request-root-id"];
+    ``` js
+    // read the correlation header
+    var id = undefined;
+    if (req && req.headers){
+        id = req.headers["x-ms-request-root-id"];
+    }
 
     // set the correlation header to the outgoing http request
     var headers = (id !== undefined) ? {"x-ms-request-root-id": id} : {};
-    http.get({ host: "finance.google.com", path: path + stock, headers }, function (response) {
-    ...
-    });
-}
-```
+    http.get({ host: "finance.google.com", path: path + stock, headers: headers }, function (response) {
+    ```
 
-3. Restart IIS.
-4. Open the latest request telemetry in **backend** application. See that requests now are correlated with dependency call:
+3. Restart IIS. Run `cmd` "As Administrator" and type `iisreset` there.
+4. Open [http://localhost:24002/](http://localhost:24002/) and click couple links. Make sure you had at least couple failures while browsing individual stocks
+4. Open the latest request telemetry in **backend** application. It may take up to two minutes for telemetry to show up. Click on "Server Response Time" chart, pick "GET /" operaiton. See that requests now are correlated with dependency call:
 
     ![image](/instructions/now-they-are-correlated.png)
 
-5. Now you see that requests with the status code 204 have a failed dependency calls associated with them.
+5. Now you see that requests with the status code 204 have a failed dependency calls associated with them. As applicaiton owner you can find out that the dependency url has incorrect query string parameters.

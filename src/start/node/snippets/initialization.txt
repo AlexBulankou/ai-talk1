@@ -1,0 +1,2 @@
+var appInsights = require("applicationinsights");
+appInsights.setup("<instrumentation_key_for_node_app>").start();

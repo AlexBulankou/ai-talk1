@@ -1,0 +1,15 @@
+appInsights.client.addTelemetryProcessor(function(envelope, context){
+    if (envelope.data.baseType === "Microsoft.ApplicationInsights.RemoteDependencyData") {
+        var reqOptions = context["http.RequestOptions"];
+        // check if context object passed with telemetry initializer contains expected headers property
+        if (reqOptions && reqOptions.headers) {
+            // get the correlation id from headers
+            var id = reqOptions.headers["x-ms-request-root-id"];
+            if (id !== undefined) {
+                // associate telemetry item with this correlaiton id
+                envelope.tags["ai.operation.id"] = id;
+            }
+        }
+    }
+    return true;
+});
