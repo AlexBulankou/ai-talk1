@@ -2,7 +2,7 @@ var http = require('http');
 var url = require('url');
 
 var appInsights = require("applicationinsights");
-appInsights.setup("346a9b7d-925f-4567-9ebe-bfdc762646ed").start();
+appInsights.setup("7aafb828-d53f-4aa0-9d2e-40caed57f670").start();
 
 appInsights.client.addTelemetryProcessor(function(envelope, context)  {
     if (envelope.data.baseType === "Microsoft.ApplicationInsights.RemoteDependencyData") {
