@@ -87,8 +87,12 @@ This machine comes with IIS configured to serve both components of the microserv
 1. Open command line 
 2. Type `cd C:\tr24\lab`
 3. Type `git pull`
-3. Verify that you have frontend application is running on HTTP port 24002 by running [http://localhost:24002](http://localhost:24002) in the browser
+3. Verify that you have frontend application is running on HTTP port 24002 by running [http://localhost:24002](http://localhost:24002) in browser
 4. Verify that you have backend application is running on HTTP port 24001 by running [http://localhost:24001/?stock=msft](http://localhost:24001/?stock=msft)
+5. Open Chrome browser and navigate to a stock page, for example, [http://localhost:24002/Home/Details?stock=msft](http://localhost:24002/Home/Details?stock=msft). Start refreshing the page by setting auto-refresh extension to 3 seconds. This will continue to generate traffic to the site.
+
+    ![image](/instructions/refresh.PNG)
+
 5. Now let's onboard applications to Application Insights
 
 ### Task 2. Onboard NODE.JS application (backend)
@@ -116,12 +120,13 @@ There are many ways to enable Application Insights for ASP.NET application. In t
 2. Open folder `C:\tr24\lab\src\start\aspnet\tr24ai\tr24ai\`
 3. Open file `ApplicationInsights.config`
 4. Replace  `<!-- Insert instrumentation key here-->` with the instrumentation key from the step 1 `<InstrumentationKey>instrumentation_key_for_aspnet_app</InstrumentationKey>`
-5. Verify that you have frontend applicationis still running on HTTP port 24002 by running [http://localhost:24002](http://localhost:24002) in the browser
-6. Open **frontend** component in Azure portal. Live Stream tile should show 1 instance
+5. Restart IIS. Run `cmd` "As Administrator" and type `iisreset` there.    
+6. Verify that you have frontend applicationis still running on HTTP port 24002 by checking [http://localhost:24002](http://localhost:24002) in the browser
+7. Open **frontend** component in Azure portal. Live Stream tile should show 1 instance
 
     ![image](/instructions/live-stream-frontend.png)
 
-7. Click on live stream button to see Application Insights telemetry in realtime.
+8. Click on live stream button to see Application Insights telemetry in realtime.
 
 ### Task 4. Enabling telemetry collection from the JavaScript (frontend)
 
@@ -149,7 +154,7 @@ There is no reason to use the same instrumentation key for the JavaScript and se
     ```
     4. Replace `instrumentation_key_for_aspnet_app` in the inserted snippet to the actual instrumentation key
 
-3. Open [http://localhost:24002](http://localhost:24002) in the browser and click couple links to generate some telemetry. It takes some time for telemetry to show up on server. You'll see telemetry from JavaScript in the next exercise.
+3. Ensure that you have [http://localhost:24002](http://localhost:24002) still running with auto-refresh extension configured to 3 seconds, so telemetry is generated. It takes some time for telemetry to be processed by Application Insights and appear in the portal. You'll see telemetry from JavaScript in the next exercise.
 
 ## Excercise 3. Create a microservice dashboard
 
@@ -260,29 +265,6 @@ Application Map represents topology of your application. It shows health and per
     
 4. Click on 📌 (:pushpin:) button in the top right corner to save the updated map to your dashboard. Close the blade and reload the page. Note that the map on the dashboard has preserved custom filter settings.
 
-###Task 4. View multi-server application map (experimental feature, if time permits)
-
-1. This task uses experimental Application Map feature that is not yet available to everyone. To ensure you're loading the version of the portal with this feature enabled, reload the portal with the following link: https://aka.ms/apcc (short for https://portal.azure.com/?appInsightsExtension_OverrideSettings=appMapExperience:appMapLegacyErrorPaneMultiServer) Please note that screenshots in this lab manual may not be the same as the latest visuals in the product.
-
-2.  Tag both **frontend** and **backend** applications with the same key:value pair. To add the tag, open Application Insights resource and click on Tags in the resource menu. In the Tags blade and key and value and click Save. Make sure to use the same tag key and value for both **frontend** and **backend**
-
-    ![image](/instructions/appmap-tags.PNG)
-
-3. Open Application Map for **backend** component and click Filters on the header to open Filters blade.
-4. Under tags section on the Filters blade, check the tag that you just added. Uncheck ``Show current resource group`` and ``Show dependencies`` under ``Resources``.
-
-    ![image](/instructions/appmap-tags-apply.PNG)
-
-5. Click ``Update`` to apply your changes and close Filters blade. Click ``Refresh`` on the Application Map header to see your changes. 
-6. You can now see **frontend** application appearing on Application Map alongside **backend** application.
-7. Select **backend** application node on the map. You will see incoming calls from **frontend** application.
-
-    ![image](/instructions/appmap-be-x.PNG)
-
-8. Now select **frontend** application node on the map. You will see outgoing calls to **backend** application. Spend some time studying how backend component is displayed in this view. It is showing both dependency metrics for the call originating from frontend component, as well as server metrics for the calls originating from all other potential callers into backend component.
-
-    ![image](/instructions/appmap-fe-x.PNG)
-
 ## Excercise 5. Find a bug/trace transactions
 Out of the box Application Insights allows to track the transaction execution accross the multiple layers. Application Insights is using the root-parent-self combination of telemetry item identifiers. In this excercise you'll learn how Application Insights correlates telemetry items and how cross-components correlation identifiers are propagated across the layers.
 
@@ -370,8 +352,8 @@ Out of the box Application Insights allows to track the transaction execution ac
 
 3. Restart IIS. Run `cmd` "As Administrator" and type `iisreset` there.
 4. Open [http://localhost:24002/](http://localhost:24002/) and click couple links. Make sure you had at least couple failures while browsing individual stocks
-4. Open the latest request telemetry in **backend** application. It may take up to two minutes for telemetry to show up. Click on "Server Response Time" chart, pick "GET /" operaiton. See that requests now are correlated with dependency call:
+5. Open the latest request telemetry in **backend** application. It may take up to two minutes for telemetry to show up. Click on "Server Response Time" chart, pick "GET /" operaiton. See that requests now are correlated with dependency call:
 
     ![image](/instructions/now-they-are-correlated.png)
 
-5. Now you see that requests with the status code 204 have a failed dependency calls associated with them. As applicaiton owner you can find out that the dependency url has incorrect query string parameters.
+6. Now you see that requests with the status code 204 have a failed dependency calls associated with them. As applicaiton owner you can find out that the dependency url has incorrect query string parameters.
